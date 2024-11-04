@@ -56,7 +56,7 @@ void loop() {
 		}else{
 			if(zeroTime<millis()){
 				// processNotes();
-				
+				//what
 				for (size_t i = 0; i < 6; i++){
 					
 					for (size_t j = 0; j < 8; j++){
