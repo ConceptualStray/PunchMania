@@ -1,0 +1,24 @@
+{
+	"folders": [
+		{
+			"path": "../../../../Code/punchboard"
+		},
+		{
+			"name": "PunchMania",
+			"path": ".."
+		}
+	],
+	"settings": {
+		"files.associations": {
+			"*.script": "lua",
+			"*.ltx": "ini",
+			"iterator": "cpp",
+			"initializer_list": "cpp",
+			"xutility": "cpp",
+			"tuple": "cpp",
+			"utility": "cpp",
+			"algorithm": "cpp",
+			"new": "cpp"
+		}
+	}
+}
