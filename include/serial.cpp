@@ -1,91 +1,101 @@
 #include <Arduino.h>
 
-bool stringToBool(String str) {
-    str.toLowerCase();  // Make it case-insensitive
-    return (str == "true" || str == "1");
+
+const int maxCommandLength = 10;
+void processCommand(char pointer, const char* command);
+void cleanSerial();
+
+void reinitTime(){
+	zeroTime=millis();
 }
 
-//c.command
-String commandConfig(String command){
-	if(command.startsWith("offset")){
-		//get offset from cmd
-		String data=command.substring(9);
-		offset=data.toFloat()*1000;
-		return String (offset);
-	}
-
-	return "No command";
+long now(){
+	return (millis() - zeroTime)-offset;
 }
 
-// m.command
-String commandMusic(String command){
-	if(command.equals("start")){
-		zeroTime=millis()+startOffset;
-		isPlaying=true;
-		return "Start";
+void clearMemory(){
+	for(int i=0;i<maxNotesInMem;i++){
+		// notes[i][0]=-1;
 	}
-
-	if(command.equals("stop")){
-		isPlaying=false;
-		return "Stopped";
+	for(int i=0;i<maxLookahead;i++){
+		// notes[i][0]=-1;
+		// notes[i][1]=-1;
+		// notes[i][2]=-1;
+		// notes[i][3]=-1;
 	}
 	
-	return "No command";
 }
 
-//d.command
-const int numGroups = 6;
-const int ledsPerGroup = 8;
-String commandDebug(String command){
-	int ledNumber = command.substring(1).toInt();
-	toggleLed(ledNumber);
-	return String(ledNumber);
+void readSerial(){
+	static char commandBuffer[maxCommandLength];
+	static int commandIndex=0;
+    while (Serial.available() > 0) {
+        char incomingByte = Serial.read();
+
+        if (incomingByte == '\n') {
+            commandBuffer[commandIndex] = '\0'; // Null-terminate the command
+            bool validCommandPointer = false;
+
+            for (int i = 0; i < sizeof(validCommandPointers); i++) {
+                if (commandBuffer[0] == validCommandPointers[i][0]) {
+                    validCommandPointer = true;
+                    break;
+                }
+            }
+
+            if (validCommandPointer) {
+                processCommand(commandBuffer[0], commandBuffer + 1);
+				cleanSerial();
+            } else {
+                Serial.print("e:");
+                Serial.println(commandBuffer);
+            }
+
+            commandIndex = 0; // Reset command buffer index
+			memset(commandBuffer, 0, sizeof(commandBuffer));
+        } else {
+            if (commandIndex < maxCommandLength - 1) {
+                commandBuffer[commandIndex++] = incomingByte;
+            }
+        }
+    }
 }
 
-//n.command
-String commandNotes(String command){
-	if(command.startsWith("add")){
-		String data=command.substring(3);
-		//strip brackets
-		int bStart=data.indexOf("[");
-		int bEnd=data.indexOf("]");
-		if(bStart!=-1 && bEnd!=-1){
-			data.remove(bStart,1);
-			data.remove(bEnd - bStart - 1, 1);
-		}
+void processCommand(char pointer, const char* commandValue) {
 
-		notes[totalNotesCnt][0]=data.substring(0,data.indexOf(",")).toFloat();
-		notes[totalNotesCnt][1]=data.substring(data.indexOf(",")+1).toInt();
 
+	if(pointer=='s'){
+		zeroTime=millis()+(startOffset-serialTimeOffset);
+		isPlaying=true;
+		return;
+	}else if(pointer=='o'){
+		//set offset
+		offset=atof(commandValue)*1000;
+		return;
+	}else if(pointer=='e'){
+		isPlaying=false;
+		return;
+
+	}else if(pointer=='c'){
+		clearMemory();
+		return;
+	}else if(pointer=='n'){
+		notes[totalNotesCnt][0]=atof(commandValue);
 		totalNotesCnt=(totalNotesCnt+1)%maxNotesInMem;
-		return String(totalNotesCnt);
+		return;
+	}else if(pointer=='l'){
+		//toggle led
+		toggleLed(atoi(commandValue));
+		return;
 	}
 
-	if(command.equals("clear")){
-		totalNotesCnt=0;
-		for(int i=0;i<maxNotesInMem;i++){
-			notes[i][0]=-1;
-			notes[i][1]=-1;
-		}
-		return "Cleared";
-	}
 
-	return "No command";
+    Serial.println("OK");
+
+
 }
 
-void commandParse(String pointer,String command){
-	String response="No command";
-	if(pointer.equals("c")){
-		response=commandConfig(command);
-	}else if(pointer.equals("m")){
-		response=commandMusic(command);
-	}else if(pointer.equals("d")){
-		response=commandDebug(command);
-	}else if(pointer.equals("n")){
-		response=commandNotes(command);
-	}
-	Serial.println(response);
-	//clear the buffer	
+void cleanSerial(){
 	while (Serial.available() > 0) {
 		Serial.read();
 	}

@@ -1,16 +1,23 @@
-
-bool debug=false;
-
-
 #define dataPin 8 // Data Pin
 #define clockPin 11 // Clock Pin
 #define latchPin 12 // Latch Pin
+#define serialTimeOffset 0 
 
-#define maxNotesInMem 20
+#define maxNotesInMem 100
 #define maxLookahead 24
 #define startOffset 1500
 #define lookAhead 1500
 #define LED_8_ON_DURATION 1000  // 0.3 seconds in milliseconds
+#define LED_TIMESTEP lookAhead/7
+const char* validCommandPointers[] = {
+	"s",//start playing
+	"c",//clear memory
+	"e",//end playing
+	"o",//offset
+	"n",//notes
+	"l",//leds
+
+};
 
 
 const int ledIds[6][8] = {
@@ -31,23 +38,31 @@ bool flipSides=false;
 int disabledIds[6]={0};
 
 
-float offset=0;
+unsigned long offset=0;
 
 
-//[when,prefered led id -1 if none]
-int notes[maxNotesInMem][2]={
-	{1000,-1},
-	{2000,-1},
-	{3000,-1},
-	{4000,-1},
-	{5000,-1},
-	{6000,-1},
-	{7000,-1},
-	{8000,-1},
-	{9000,-1},
+int notes[maxNotesInMem][1]={
+	{1000},
+	{1000},
+	{1000},
+	{1000},
+	{1000},
+	{1000},
+	{1000},
+	{1000},
+	{1000},
+	{1000},
 	};
 byte shiftRegisterState[6] = {0}; // Each byte controls 8 outputs
 uint8_t totalNotesCnt=0;
 
 //note id, last led id, and changeover time
-int notesInMem[maxLookahead][4];
+struct Note {
+    long timestamp;
+	int8_t ledId;
+	int8_t groupId;
+    long changeOverTime;
+} __attribute__((packed)); // Ensure the struct is packed efficiently
+
+// Array of notes in memory
+Note notesInMem[maxLookahead];
