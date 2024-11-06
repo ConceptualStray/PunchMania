@@ -3,8 +3,8 @@
 #define latchPin 12 // Latch Pin
 #define serialTimeOffset 0 
 
-#define maxNotesInMem 100
-#define maxLookahead 24
+#define MAX_NOTES 100
+#define MAX_MEM_NOTES 24
 #define startOffset 1500
 #define lookAhead 1500
 #define LED_8_ON_DURATION 1000  // 0.3 seconds in milliseconds
@@ -41,7 +41,7 @@ int disabledIds[6]={0};
 unsigned long offset=0;
 
 
-int notes[maxNotesInMem][1]={
+int notes[MAX_NOTES][1]={
 	{1000},
 	{1000},
 	{1000},
@@ -58,11 +58,11 @@ uint8_t totalNotesCnt=0;
 
 //note id, last led id, and changeover time
 struct Note {
-    long timestamp;
-	int8_t ledId;
-	int8_t groupId;
-    long changeOverTime;
+    long timestamp=-1;
+	int8_t ledId=-1;
+	int8_t groupId=-1;
+    long changeOverTime=-1;
 } __attribute__((packed)); // Ensure the struct is packed efficiently
 
 // Array of notes in memory
-Note notesInMem[maxLookahead];
+Note notesInMem[MAX_MEM_NOTES];

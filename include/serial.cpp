@@ -14,10 +14,10 @@ long now(){
 }
 
 void clearMemory(){
-	for(int i=0;i<maxNotesInMem;i++){
+	for(int i=0;i<MAX_NOTES;i++){
 		// notes[i][0]=-1;
 	}
-	for(int i=0;i<maxLookahead;i++){
+	for(int i=0;i<MAX_MEM_NOTES;i++){
 		// notes[i][0]=-1;
 		// notes[i][1]=-1;
 		// notes[i][2]=-1;
@@ -81,7 +81,7 @@ void processCommand(char pointer, const char* commandValue) {
 		return;
 	}else if(pointer=='n'){
 		notes[totalNotesCnt][0]=atof(commandValue);
-		totalNotesCnt=(totalNotesCnt+1)%maxNotesInMem;
+		totalNotesCnt=(totalNotesCnt+1)%MAX_NOTES;
 		return;
 	}else if(pointer=='l'){
 		//toggle led
