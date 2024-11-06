@@ -41,17 +41,17 @@ int disabledIds[6]={0};
 unsigned long offset=0;
 
 
-int notes[MAX_NOTES][1]={
-	{1000},
-	{1000},
-	{1000},
-	{1000},
-	{1000},
-	{1000},
-	{1000},
-	{1000},
-	{1000},
-	{1000},
+int notes[MAX_NOTES]={
+	1000,
+	1000,
+	1000,
+	1000,
+	1000,
+	1000,
+	1000,
+	1000,
+	1000,
+	1000,
 	};
 byte shiftRegisterState[6] = {0}; // Each byte controls 8 outputs
 uint8_t totalNotesCnt=0;

@@ -31,13 +31,11 @@ void readSerial(){
 	static int commandIndex=0;
     while (Serial.available() > 0) {
         char incomingByte = Serial.read();
-
         if (incomingByte == '\n') {
             commandBuffer[commandIndex] = '\0'; // Null-terminate the command
             bool validCommandPointer = false;
-
             for (int i = 0; i < sizeof(validCommandPointers); i++) {
-                if (commandBuffer[0] == validCommandPointers[i][0]) {
+                if (strcmp(commandBuffer, validCommandPointers[i]) == 0) {
                     validCommandPointer = true;
                     break;
                 }
@@ -80,7 +78,7 @@ void processCommand(char pointer, const char* commandValue) {
 		clearMemory();
 		return;
 	}else if(pointer=='n'){
-		notes[totalNotesCnt][0]=atof(commandValue);
+		notes[totalNotesCnt]=atof(commandValue);
 		totalNotesCnt=(totalNotesCnt+1)%MAX_NOTES;
 		return;
 	}else if(pointer=='l'){
@@ -88,11 +86,6 @@ void processCommand(char pointer, const char* commandValue) {
 		toggleLed(atoi(commandValue));
 		return;
 	}
-
-
-    Serial.println("OK");
-
-
 }
 
 void cleanSerial(){
