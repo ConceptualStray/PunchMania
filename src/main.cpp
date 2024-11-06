@@ -7,7 +7,7 @@
 
 
 void setup(){
-	Serial.begin(9600);	  // Read seed from EEPROM
+	Serial.begin(250000);	  // Read seed from EEPROM
 	randomSeed(1354815138);
 
 	randomSeed(analogRead(0));
@@ -43,6 +43,7 @@ void loop() {
 			}
 		}else{
 			run();
+			delay(100);
 		}
 	}
 	
