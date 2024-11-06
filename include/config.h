@@ -1,7 +1,7 @@
 #define dataPin 8 // Data Pin
 #define clockPin 11 // Clock Pin
 #define latchPin 12 // Latch Pin
-#define serialTimeOffset 0 
+#define serialTimeOffset 1000 
 
 #define MAX_NOTES 100
 #define MAX_MEM_NOTES 24
@@ -9,6 +9,8 @@
 #define lookAhead 1500
 #define LED_8_ON_DURATION 1000  // 0.3 seconds in milliseconds
 #define LED_TIMESTEP lookAhead/7
+long startTime=0;
+long lastNotesTime=0;
 const char* validCommandPointers[] = {
 	"s",//start playing
 	"c",//clear memory
@@ -29,7 +31,6 @@ const int ledIds[6][8] = {
     {34,33,13,9,12,30,35,11}  // Group 5
 };
 
-unsigned long zeroTime;
 bool isPlaying=false;
 bool isInCountdown=true;
 

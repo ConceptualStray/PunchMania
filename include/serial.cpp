@@ -5,12 +5,8 @@ const int maxCommandLength = 10;
 void processCommand(char pointer, const char* command);
 void cleanSerial();
 
-void reinitTime(){
-	zeroTime=millis();
-}
-
 long now(){
-	return (millis() - zeroTime)-offset;
+	return millis()-offset;
 }
 
 void clearMemory(){
@@ -63,8 +59,10 @@ void processCommand(char pointer, const char* commandValue) {
 
 
 	if(pointer=='s'){
-		zeroTime=millis()+(startOffset-serialTimeOffset);
+		startTime=now()+serialTimeOffset;
+		lastNotesTime=startTime;
 		isPlaying=true;
+		Serial.println(lastNotesTime);
 		return;
 	}else if(pointer=='o'){
 		//set offset

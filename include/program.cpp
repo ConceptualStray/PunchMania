@@ -11,15 +11,10 @@ uint8_t lastNotesIndex=0;
 
 void loadNotesIntoMemory() {
 
-	long baseTime=now();
-	// Serial.println("Base time: "+String(baseTime));
-	reinitTime();
-	long updatedBaseTime=now();
-	// Serial.println("Updated base time: "+String(updatedBaseTime));
 	int hasSpaceOffset=0;
 	int availableSpace=0;
 
-	// Serial.println("Adjusting timestamps");
+
 	for (size_t i = 0; i < MAX_MEM_NOTES; i++) {
 		if (notesInMem[i].timestamp == -1) {
 			// Serial.println("Full, break");
@@ -27,12 +22,6 @@ void loadNotesIntoMemory() {
 			availableSpace++;
 			continue;
 		}
-		
-		long timeDiff = baseTime - updatedBaseTime;
-		// Serial.println("Timediff: "+String(timeDiff));
-		notesInMem[i].timestamp -= timeDiff;
-		notesInMem[i].changeOverTime -= timeDiff;
-		// Shift to the left by available space
 		if (hasSpaceOffset > 0) {
 			// Serial.println(hasSpaceOffset);
 			int offsetIndex = i - hasSpaceOffset;
@@ -46,7 +35,6 @@ void loadNotesIntoMemory() {
 	// Serial.println("Loading notes into memory");
 	// Serial.println("Available space: "+String(availableSpace));
 	if(availableSpace>0){
-		long accumulatedTime=now();
 		int8_t memoryIndex=MAX_MEM_NOTES-availableSpace;
 		for (size_t i = lastNotesIndex; i < MAX_NOTES and memoryIndex<MAX_MEM_NOTES; i++) {
 			lastNotesIndex=i%MAX_NOTES;
@@ -55,13 +43,13 @@ void loadNotesIntoMemory() {
 			if (relativeTime <0) break;
 			// Serial.println("Relative time: "+String(relativeTime));
 			// Serial.println("Accumulated time: "+String(accumulatedTime));
-			accumulatedTime += relativeTime;
+			lastNotesTime += relativeTime;
 
 			Note note;
-			note.timestamp=accumulatedTime;
+			note.timestamp=lastNotesTime;
 			note.ledId=0;
 			note.groupId=getRandomGroupId();
-			note.changeOverTime=accumulatedTime-relativeTime-lookAhead+LED_TIMESTEP;
+			note.changeOverTime=lastNotesTime-relativeTime+LED_TIMESTEP;
 			// Serial.println("Loading into mem: "+String(i)+": "+String(note.timestamp)+", "+String(note.ledId)+", "+String(note.groupId)+", "+String(note.changeOverTime));
 			notesInMem[memoryIndex]=note;
 
@@ -77,14 +65,13 @@ void run(){
 
 	loadNotesIntoMemory();
 	
-	long timenow=now();
 	for (size_t i = 0; i < MAX_MEM_NOTES; i++){
 		Note note=notesInMem[i];
 		
-		if(note.timestamp<0)continue;
-		// Serial.println("Now: "+String(timenow)+", "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
-		Serial.println("Changeover: "+String(note.changeOverTime));
-		if(note.changeOverTime<=timenow){
+		if(note.timestamp<0 or note.timestamp>(now()+lookAhead))continue;
+		if(i==0)Serial.println("Now: "+String(now())+", "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
+		// Serial.println("Changeover: "+String(note.changeOverTime));
+		if(note.changeOverTime<=now()){
 			if(note.ledId>7){
 				Serial.println("End of group "+String(i));
 				notesInMem[i].timestamp=-1;
@@ -101,7 +88,7 @@ void run(){
 			if(note.ledId==7){
 				timestep=LED_8_ON_DURATION;
 			}
-			note.changeOverTime=timenow+timestep;
+			note.changeOverTime=now()+timestep;
 			notesInMem[i]=note;
 		}
 	}

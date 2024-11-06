@@ -43,7 +43,6 @@ void loop() {
 			}
 		}else{
 			run();
-			delay(100);
 		}
 	}
 	
