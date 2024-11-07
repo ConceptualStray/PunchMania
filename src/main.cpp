@@ -16,9 +16,15 @@ void setup(){
 	pinMode(clockPin, OUTPUT);
 	pinMode(latchPin, OUTPUT);
 	// zero all the leds and SRs
-	updateShiftRegisters();
+	// updateShiftRegisters();
 
 	clearMemory();
+	testpopulate();
+	for (size_t i = 0; i < 6; i++)
+	{
+		// toggleWholeGroup(i);
+	}
+	updateShiftRegisters();
 }
 
 
@@ -43,8 +49,9 @@ void loop() {
 			}
 		}else{
 			run();
+			updateShiftRegisters();
 		}
 	}
-	
+	updateShiftRegisters();
 }
 

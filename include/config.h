@@ -1,13 +1,13 @@
 #define dataPin 8 // Data Pin
 #define clockPin 11 // Clock Pin
 #define latchPin 12 // Latch Pin
-#define serialTimeOffset 1000 
+#define serialTimeOffset 0 
 
 #define MAX_NOTES 100
 #define MAX_MEM_NOTES 24
 #define startOffset 1500
-#define lookAhead 1500
-#define LED_8_ON_DURATION 1000  // 0.3 seconds in milliseconds
+#define lookAhead 700
+#define LED_8_ON_DURATION 500  // 0.3 seconds in milliseconds
 #define LED_TIMESTEP lookAhead/7
 long startTime=0;
 long lastNotesTime=0;
@@ -18,6 +18,7 @@ const char* validCommandPointers[] = {
 	"o",//offset
 	"n",//notes
 	"l",//leds
+	"d",//debug
 
 };
 
@@ -42,18 +43,7 @@ int disabledIds[6]={0};
 unsigned long offset=0;
 
 
-int notes[MAX_NOTES]={
-	1000,
-	1000,
-	1000,
-	1000,
-	1000,
-	1000,
-	1000,
-	1000,
-	1000,
-	1000,
-	};
+int notes[MAX_NOTES];
 byte shiftRegisterState[6] = {0}; // Each byte controls 8 outputs
 uint8_t totalNotesCnt=0;
 

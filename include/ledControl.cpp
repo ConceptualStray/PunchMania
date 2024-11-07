@@ -45,7 +45,7 @@ void toggleLed(int ledIndex) {
 	// Serial.println("Led "+String(ledIndex));
 	
 	// Update the shift registers with the new states
-	updateShiftRegisters();
+	// updateShiftRegisters();
 }
 
 void toggleWholeGroup(int groupId){

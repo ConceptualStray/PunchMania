@@ -6,21 +6,51 @@ void processCommand(char pointer, const char* command);
 void cleanSerial();
 
 long now(){
-	return millis()-offset;
+	return millis()-startTime-offset;
+}
+
+void testpopulate(){
+	for(int i=0;i<70;i++){
+		notes[i]=1000;
+	}
 }
 
 void clearMemory(){
 	for(int i=0;i<MAX_NOTES;i++){
-		// notes[i][0]=-1;
+		// Note note;
+		// note.timestamp=-1;
+		// notesInMem[i]=note;
 	}
 	for(int i=0;i<MAX_MEM_NOTES;i++){
-		// notes[i][0]=-1;
-		// notes[i][1]=-1;
-		// notes[i][2]=-1;
-		// notes[i][3]=-1;
+		notes[i]=-1;
 	}
 	
 }
+
+void printActiveLEDs() {
+    Serial.print("Active LEDs: ");
+    bool foundActiveLED = false;
+
+    for (int byteIndex = 0; byteIndex < 6; byteIndex++) {
+        for (int bitIndex = 0; bitIndex < 8; bitIndex++) {
+            // Check if the specific bit is set
+            if (shiftRegisterState[byteIndex] & (1 << bitIndex)) {
+                int ledID = byteIndex * 8 + bitIndex;
+                Serial.print(ledID);
+                Serial.print(" ");
+                foundActiveLED = true;
+            }
+        }
+    }
+
+    if (!foundActiveLED) {
+        Serial.println("None");
+    } else {
+        Serial.println();
+    }
+}
+
+
 
 void readSerial(){
 	static char commandBuffer[maxCommandLength];
@@ -82,6 +112,10 @@ void processCommand(char pointer, const char* commandValue) {
 	}else if(pointer=='l'){
 		//toggle led
 		toggleLed(atoi(commandValue));
+		return;
+	}else if(pointer=='d'){
+		//toggle led
+		printActiveLEDs();
 		return;
 	}
 }
