@@ -89,8 +89,6 @@ void processCommand(char pointer, const char* commandValue) {
 
 
 	if(pointer=='s'){
-		TIME_START=now()+OFFSET_SERIAL;
-		TIME_NOTES_AGGREGATED=TIME_START;
 		isPlaying=true;
 		Serial.println(TIME_NOTES_AGGREGATED);
 		return;

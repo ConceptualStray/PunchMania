@@ -73,7 +73,7 @@ void run(){
 		//int this loop we can also add later check for btn press
 		// and if it's pressed we can toggle the whole group off
 		if(activePads[i]>0 and activePads[i]>=now()){
-			toggleWholeGroupOff(i);
+			toggleLedOff(ledIds[i][7]);
 			deregisterActivePad(i);
 		}
 	}
@@ -87,7 +87,7 @@ void run(){
 		// if(i==0)Serial.println("Now: "+String(now())+", "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
 		// Serial.println("Changeover: "+String(note.changeOverTime));
 		if(note.timestamp>=now()){
-			toggleWholeGroupOff(note.groupId);
+			toggleLedOff(ledIds[note.groupId][--note.ledId]);
 			//toggle on the last led
 			toggleLedOn(ledIds[note.groupId][7]);
 			registerActivePad(note.groupId);
