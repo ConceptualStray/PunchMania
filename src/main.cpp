@@ -43,6 +43,7 @@ void loop() {
                 if (currentGroupId == 7){
 					isInCountdown = false;
 					TIME_START=millis()-OFFSET_SERIAL;
+					TIME_NOTES_AGGREGATED=TIME_START;
 				}
 			}
 		}else{
