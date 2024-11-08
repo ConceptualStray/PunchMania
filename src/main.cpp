@@ -7,23 +7,20 @@
 
 
 void setup(){
-	Serial.begin(250000);	  // Read seed from EEPROM
+	Serial.begin(250000);
+
 	randomSeed(1354815138);
 
-	randomSeed(analogRead(0));
-	//shift registers pins setup
-	pinMode(dataPin, OUTPUT);
-	pinMode(clockPin, OUTPUT);
-	pinMode(latchPin, OUTPUT);
-	// zero all the leds and SRs
-	// updateShiftRegisters();
+
+	pinMode(PIN_DATA, OUTPUT);
+	pinMode(PIN_CLOCK, OUTPUT);
+	pinMode(PIN_LATCH, OUTPUT);
 
 	clearMemory();
+
+
 	testpopulate();
-	for (size_t i = 0; i < 6; i++)
-	{
-		// toggleWholeGroup(i);
-	}
+
 	updateShiftRegisters();
 }
 
@@ -36,7 +33,7 @@ void loop() {
 	readSerial();
 	if(isPlaying){
 		if(isInCountdown){
-			float groupTime=(startOffset-offset)/6;
+			float groupTime=(START_SEQUENCE_DURATION)/6;
             if (millis() - lastCountDownTime >= groupTime) {
 				if(currentGroupId < 6)toggleWholeGroup(currentGroupId);  
 				if(prevGroupId != -1)toggleWholeGroup(prevGroupId);        
@@ -45,11 +42,11 @@ void loop() {
                 currentGroupId = (currentGroupId + 1);
                 if (currentGroupId == 7){
 					isInCountdown = false;
+					TIME_START=millis()-OFFSET_SERIAL;
 				}
 			}
 		}else{
 			run();
-			updateShiftRegisters();
 		}
 	}
 	updateShiftRegisters();
