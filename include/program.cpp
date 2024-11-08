@@ -17,7 +17,6 @@ void loadNotesIntoMemory() {
 
 	for (size_t i = 0; i < MAX_MEM_NOTES; i++) {
 		if (notesInMem[i].timestamp == -1) {
-			// Serial.println("Full, break");
 			hasSpaceOffset++;
 			availableSpace++;
 			continue;
@@ -32,37 +31,53 @@ void loadNotesIntoMemory() {
 			}
 		}
 	}
-	// Serial.println("Loading notes into memory");
-	// Serial.println("Available space: "+String(availableSpace));
 	if(availableSpace>0){
 		int8_t memoryIndex=MAX_MEM_NOTES-availableSpace;
 		for (size_t i = lastNotesIndex; i < MAX_NOTES and memoryIndex<MAX_MEM_NOTES; i++) {
-			lastNotesIndex=i%MAX_NOTES;
 			int relativeTime = notes[i];
+			if (relativeTime<=0) break;
 
-			if (relativeTime <0) break;
-			// Serial.println("Relative time: "+String(relativeTime));
-			// Serial.println("Accumulated time: "+String(accumulatedTime));
-			lastNotesTime += relativeTime;
+			
+			notes[i]=0;
+
+			TIME_NOTES_AGGREGATED += relativeTime;
 
 			Note note;
-			note.timestamp=lastNotesTime;
+			note.timestamp=TIME_NOTES_AGGREGATED;
 			note.ledId=0;
 			note.groupId=getRandomGroupId();
-			note.changeOverTime=lastNotesTime-lookAhead-relativeTime+LED_TIMESTEP;
-			Serial.println("Loading into mem: "+String(i)+": "+String(note.timestamp)+", "+String(note.ledId)+", "+String(note.groupId)+", "+String(note.changeOverTime));
+			note.changeOverTime=TIME_NOTES_AGGREGATED-TIME_SCAN_AHEAD-relativeTime+DURATION_LED_SUB;
+			// Serial.println("Loading into mem: "+String(i)+": "+String(note.timestamp)+", "+String(note.ledId)+", "+String(note.groupId)+", "+String(note.changeOverTime));
 			notesInMem[memoryIndex]=note;
 
 			memoryIndex++;
+
+			lastNotesIndex=(i+1)%MAX_NOTES;
 			
 		}
 	}
 
-	
+}
+
+void registerActivePad(int8_t groupId){
+	activePads[groupId]=now()+DURATION_LED_MAIN;
+}
+
+void deregisterActivePad(int8_t groupId){
+	activePads[groupId]=0;
 }
 
 void run(){
-
+	//6 is the number of groups/max active pads
+	for (size_t i = 0; i < 6; i++){
+		//int this loop we can also add later check for btn press
+		// and if it's pressed we can toggle the whole group off
+		if(activePads[i]>0 and activePads[i]>=now()){
+			toggleWholeGroupOff(i);
+			deregisterActivePad(i);
+		}
+	}
+	
 	loadNotesIntoMemory();
 	
 	for (size_t i = 0; i < MAX_MEM_NOTES; i++){
@@ -71,24 +86,22 @@ void run(){
 		if(note.timestamp<0)continue;
 		// if(i==0)Serial.println("Now: "+String(now())+", "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
 		// Serial.println("Changeover: "+String(note.changeOverTime));
-		if(note.changeOverTime<=now()){
-			if(note.ledId>7){
-				// Serial.println("End of group "+String(i));
-				notesInMem[i].timestamp=-1;
-				continue;
-			}
+		if(note.timestamp>=now()){
+			toggleWholeGroupOff(note.groupId);
+			//toggle on the last led
+			toggleLedOn(ledIds[note.groupId][7]);
+			registerActivePad(note.groupId);
+			notesInMem[i].timestamp=-1;
+			continue;
+		}else if(note.changeOverTime<=now()){
 			if(note.ledId>0){
 				//if we are not at the beginning of the group, turn off the previous led
-				toggleLed(ledIds[note.groupId][note.ledId]);
+				toggleLedOff(ledIds[note.groupId][note.ledId]);
 			}
 			note.ledId++;
-			toggleLed(ledIds[note.groupId][note.ledId]);
+			toggleLedOn(ledIds[note.groupId][note.ledId]);
 			
-			int timestep=LED_TIMESTEP;
-			if(note.ledId==7){
-				timestep=LED_8_ON_DURATION;
-			}
-			note.changeOverTime=now()+timestep;
+			note.changeOverTime=now()+DURATION_LED_SUB;
 			notesInMem[i]=note;
 		}
 	}

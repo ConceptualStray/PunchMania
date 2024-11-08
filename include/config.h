@@ -1,24 +1,32 @@
-#define dataPin 8 // Data Pin
-#define clockPin 11 // Clock Pin
-#define latchPin 12 // Latch Pin
-#define serialTimeOffset 0 
+#define PIN_DATA 8 // Data Pin
+#define PIN_CLOCK 11 // Clock Pin
+#define PIN_LATCH 12 // Latch Pin
+#define OFFSET_SERIAL 0 
 
 #define MAX_NOTES 100
 #define MAX_MEM_NOTES 24
-#define startOffset 1500
-#define lookAhead 700
-#define LED_8_ON_DURATION 500  // 0.3 seconds in milliseconds
-#define LED_TIMESTEP lookAhead/7
-long startTime=0;
-long lastNotesTime=0;
+
+#define START_SEQUENCE_DURATION 1500
+
+#define DURATION_LED_MAIN 500  // 0.3 seconds in milliseconds
+
+
+
+int TIME_SCAN_AHEAD=700;
+long TIME_START=0;
+long TIME_NOTES_AGGREGATED=0;
+
+int DURATION_LED_SUB=TIME_SCAN_AHEAD/7;
+
+
 const char* validCommandPointers[] = {
 	"s",//start playing
 	"c",//clear memory
 	"e",//end playing
 	"o",//offset
 	"n",//notes
-	"l",//leds
-	"d",//debug
+	"l",//toggle leds
+	"d",//debug active leds
 
 };
 
@@ -40,7 +48,7 @@ bool flipSides=false;
 int disabledIds[6]={0};
 
 
-unsigned long offset=0;
+unsigned long OFFSET_NOTE=0;
 
 
 int notes[MAX_NOTES];
@@ -57,3 +65,5 @@ struct Note {
 
 // Array of notes in memory
 Note notesInMem[MAX_MEM_NOTES];
+
+long activePads[6];

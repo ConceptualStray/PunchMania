@@ -23,16 +23,32 @@ int getRandomGroupId(){
 
 void updateShiftRegisters() {
 	// Latch low to start sending data
-	digitalWrite(latchPin, LOW);
-	
+	digitalWrite(PIN_LATCH, LOW);
+
 	// Send data to all shift registers (from last to first)
 	for (int i = 5; i >= 0; i--) {
-	  shiftOut(dataPin, clockPin, MSBFIRST, shiftRegisterState[i]);
+	  shiftOut(PIN_DATA, PIN_CLOCK, MSBFIRST, shiftRegisterState[i]);
 	}
+
 	// Latch high to output the data
-	digitalWrite(latchPin, HIGH);
+	digitalWrite(PIN_LATCH, HIGH);
 }
 
+
+
+void toggleLedOn(int ledIndex){
+	if(ledIndex<0 or ledIndex>47) return;
+	int registerIndex = ledIndex / 8;   // Determines which shift register
+	int bitIndex = ledIndex % 8;   
+	shiftRegisterState[registerIndex] |= (1 << bitIndex);
+}
+
+void toggleLedOff(int ledIndex){
+	if(ledIndex<0 or ledIndex>47) return;
+	int registerIndex = ledIndex / 8;   // Determines which shift register
+	int bitIndex = ledIndex % 8;   
+	shiftRegisterState[registerIndex] &= ~(1 << bitIndex);
+}
 
 void toggleLed(int ledIndex) {
 	// Find which shift register (0-5) and which bit (0-7) to toggle
@@ -46,6 +62,13 @@ void toggleLed(int ledIndex) {
 	
 	// Update the shift registers with the new states
 	// updateShiftRegisters();
+}
+
+void toggleWholeGroupOff(int groupId){
+	for (int j = 0; j < 8; j++) {
+		toggleLedOff(ledIds[groupId][j]); // Use ledIds[i][j] to get the LED ID
+	}
+	// if(debug)Serial.println("Toggling group "+String(groupId));
 }
 
 void toggleWholeGroup(int groupId){

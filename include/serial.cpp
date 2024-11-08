@@ -1,12 +1,12 @@
 #include <Arduino.h>
 
 
-const int maxCommandLength = 10;
+#define MAX_COMMAND_LENGHT 10
 void processCommand(char pointer, const char* command);
 void cleanSerial();
 
 long now(){
-	return millis()-startTime-offset;
+	return millis()-TIME_START-OFFSET_NOTE;
 }
 
 void testpopulate(){
@@ -53,7 +53,7 @@ void printActiveLEDs() {
 
 
 void readSerial(){
-	static char commandBuffer[maxCommandLength];
+	static char commandBuffer[MAX_COMMAND_LENGHT];
 	static int commandIndex=0;
     while (Serial.available() > 0) {
         char incomingByte = Serial.read();
@@ -78,7 +78,7 @@ void readSerial(){
             commandIndex = 0; // Reset command buffer index
 			memset(commandBuffer, 0, sizeof(commandBuffer));
         } else {
-            if (commandIndex < maxCommandLength - 1) {
+            if (commandIndex < MAX_COMMAND_LENGHT - 1) {
                 commandBuffer[commandIndex++] = incomingByte;
             }
         }
@@ -89,14 +89,14 @@ void processCommand(char pointer, const char* commandValue) {
 
 
 	if(pointer=='s'){
-		startTime=now()+serialTimeOffset;
-		lastNotesTime=startTime;
+		TIME_START=now()+OFFSET_SERIAL;
+		TIME_NOTES_AGGREGATED=TIME_START;
 		isPlaying=true;
-		Serial.println(lastNotesTime);
+		Serial.println(TIME_NOTES_AGGREGATED);
 		return;
 	}else if(pointer=='o'){
 		//set offset
-		offset=atof(commandValue)*1000;
+		OFFSET_NOTE=atof(commandValue)*1000;
 		return;
 	}else if(pointer=='e'){
 		isPlaying=false;
