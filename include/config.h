@@ -3,7 +3,7 @@
 #define PIN_LATCH 12 // Latch Pin
 #define OFFSET_SERIAL 0 
 
-#define MAX_NOTES 100
+#define MAX_NOTES 200
 #define MAX_MEM_NOTES 24
 
 #define START_SEQUENCE_DURATION 1500
@@ -12,11 +12,11 @@
 
 
 
-int TIME_SCAN_AHEAD=700;
+int TIME_SCAN_AHEAD=1000;
 long TIME_START=0;
 long TIME_NOTES_AGGREGATED=0;
 
-int DURATION_LED_SUB=TIME_SCAN_AHEAD/7;
+int DURATION_LED_SUB=TIME_SCAN_AHEAD/8;
 
 
 const char* validCommandPointers[] = {
@@ -58,8 +58,8 @@ uint8_t totalNotesCnt=0;
 //note id, last led id, and changeover time
 struct Note {
     long timestamp=-1;
-	int8_t ledId=-1;
-	int8_t groupId=-1;
+	int8_t ledId=0;
+	int8_t groupId=0;
     long changeOverTime=-1;
 } __attribute__((packed)); // Ensure the struct is packed efficiently
 

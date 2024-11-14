@@ -27,7 +27,7 @@ void clearMemory(){
 	
 }
 
-void printActiveLEDs() {
+void debugFunc() {
     Serial.print("Active LEDs: ");
     bool foundActiveLED = false;
 
@@ -48,6 +48,12 @@ void printActiveLEDs() {
     } else {
         Serial.println();
     }
+
+	for (size_t i = 0; i < 6; i++)
+	{
+		Serial.println("pad id is "+String(i)+" active: "+activePads[i]);
+	}
+	
 }
 
 
@@ -113,7 +119,7 @@ void processCommand(char pointer, const char* commandValue) {
 		return;
 	}else if(pointer=='d'){
 		//toggle led
-		printActiveLEDs();
+		debugFunc();
 		return;
 	}
 }

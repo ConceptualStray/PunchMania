@@ -18,7 +18,9 @@ void setup(){
 
 	clearMemory();
 
-
+	for(int i=0;i<6;i++){
+		toggleWholeGroupOff(i);
+	}
 	testpopulate();
 
 	updateShiftRegisters();
@@ -43,7 +45,7 @@ void loop() {
                 if (currentGroupId == 7){
 					isInCountdown = false;
 					TIME_START=millis()-OFFSET_SERIAL;
-					TIME_NOTES_AGGREGATED=TIME_START;
+					TIME_NOTES_AGGREGATED=now();
 				}
 			}
 		}else{

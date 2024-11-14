@@ -34,7 +34,9 @@ void updateShiftRegisters() {
 	digitalWrite(PIN_LATCH, HIGH);
 }
 
-
+int getLedId(int groupId, int ledIndex) {
+  return ledIds[groupId][ledIndex];
+}
 
 void toggleLedOn(int ledIndex){
 	if(ledIndex<0 or ledIndex>47) return;
