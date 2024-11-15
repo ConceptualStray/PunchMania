@@ -1,0 +1,273 @@
+<script src="https://cdn.jsdelivr.net/npm/@materializecss/materialize@1.2.0/dist/js/materialize.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.1.min.js" integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script>
+<script>
+
+
+function ajaxGET(url,callback){
+	$.ajax({
+		url:url,
+		type:'GET',
+		headers: {
+			'X-Requested-With': 'AJAX'
+		},
+		success:callback,
+		error:callback,
+	});
+}
+
+
+function ajaxPOST(url,data,callback){
+	$.ajax({
+		url: url,
+		type: 'POST',
+		contentType: 'application/json',
+		data: JSON.stringify(data),
+		headers: {
+			'X-Requested-With': 'AJAX'
+		},
+		success: callback,
+		error:callback
+	});
+}
+
+function ajaxPUT(url,data,callback){
+	$.ajax({
+		url: url,
+		type: 'PUT',
+		contentType: 'application/json',
+		data: JSON.stringify(data),
+		headers: {
+			'X-Requested-With': 'AJAX'
+		},
+		success: callback,
+		error:callback
+	});
+}
+
+function ajaxDELETE(url,callback){
+    $.ajax({
+        url: url,
+        type: 'DELETE',
+		headers: {
+			'X-Requested-With': 'AJAX'
+		},
+        success: callback,
+		error:callback
+    });
+}
+
+
+
+function isJSON (something) {
+	if (typeof something != 'string')
+		something = JSON.stringify(something);
+	try {
+		JSON.parse(something);
+		return true;
+	} catch (e) {
+		return false;
+	}
+}
+
+function mToast(string){
+	M.toast({text: string});
+}
+
+function initCharCounter(){
+	M.CharacterCounter.init($('.charCounter'));
+}
+
+function delay(callback, ms) {
+	var timer = 0;
+	return function() {
+		var context = this, args = arguments;
+		clearTimeout(timer);
+		timer = setTimeout(function () {
+			callback.apply(context, args);
+		}, ms || 0);
+	};
+}
+
+const preloadTemplate=`
+<div class="row">
+	<div class="col s12" style="position: absolute;	top: 40%;  width: 100%;">
+		<div class="center-align">
+			<h3 class="white-text loadingMsg" >Chwila... Ładujemy dane...</h3>
+		</div>
+		<div class="progress pink lighten-1" >
+			<div class="indeterminate pink lighten-4"></div>
+		</div>
+	</div>
+</div>
+`;
+
+$('body').on('click','.open-modal',function(){
+	$('#modal').html(preloadTemplate);
+	var url=$(this).attr('data-load');
+	if(url){
+		$.get(url,function(response){
+			$('#modal').html(response);
+		});
+	}
+	M.Modal.getInstance($('#modal')).open();
+});
+
+$('body').on('click','.open-fixed-modal',function(){
+	$('#modal-fixed').html(preloadTemplate);
+	var url=$(this).attr('data-load');
+	if(url){
+		$.get(url,function(response){
+			$('#modal-fixed').html(response);
+		});
+	}
+	M.Modal.getInstance($('#modal-fixed')).open();
+});
+
+$('body').on('click','.open-bottom-modal',function(){
+	$('#modal-bottom').html(preloadTemplate);
+	var url=$(this).attr('data-load');
+	if(url){
+		$.get(url,function(response){
+			$('#modal-bottom').html(response);
+		});
+	}
+	M.Modal.getInstance($('#modal-bottom')).open();
+});
+
+//clear modal contents
+$('body').on('click','.modal-close',function(){
+	var callback=$(this).attr('callback');
+	if(callback){
+		eval(callback);
+	}
+	$('#modal-fixed').html('');
+	$('#modal').html('');
+	$('#modal-bottom').html('');
+});
+
+
+$('body').on('submit','.ajaxForm',function(event){
+	event.preventDefault();
+	var container=false;
+	var append=false;
+	var toastTime=4000;
+	var url=$(this).attr('action');
+	var method=$(this).attr('method');
+	var callback=$(this).attr('callback');
+
+	if($(this).attr('data-target')){
+		container=$(this).attr('data-target');
+	}
+	if($(this).attr('ajax-target')){
+		container=$(this).attr('ajax-target');
+	}
+	if($(this).hasClass('append')){
+		append=true;
+	}
+	if($(this).attr('toast-time')){
+		toastTime=$(this).attr('toast-time');
+	}
+
+	data=$(this).serialize();
+	$.ajax({
+		url: url,
+		type: method,
+		contentType: false,
+		cache: false,
+		processData:false,
+		data: new FormData($(this)[0]),
+		headers: {
+			'X-Requested-With': 'AJAX'
+		},
+    	success: function(data) {
+			if(data && callback){
+				data=window[callback](data);
+			}
+			if(data){
+				if(container){
+					if(append){
+						data=$(container).html()+data;
+					}
+					$(container).html(data);
+				}else{
+					M.toast({text:data, displayLength:toastTime});
+				}
+			}
+    	}
+	});
+});
+
+$('body').on('click','.ajaxLink',function(){
+	var url=$(this).attr('action');
+	var callback=$(this).attr('callback');
+
+	var container=false;
+	if($(this).attr('data-target')){
+		container=$(this).attr('data-target');
+	}
+	if($(this).attr('ajax-target')){
+		container=$(this).attr('ajax-target');
+	}
+
+	var toastTime=4000;
+	if($(this).attr('toast-time')){
+		toastTime=$(this).attr('toast-time');
+	}
+	$.ajax(url).done(function(data){
+		if(data && callback){
+			data=window[callback](data);
+		}
+		if(data){
+			if(container){
+				$(container).html(data);
+			}else{
+				M.toast({text:data, displayLength:toastTime});
+			}
+		}
+      }
+	)
+});
+
+$('body').on('click','.toastOnClick',function(){
+	var data=$(this).attr('toast-data');
+	var time=4000;
+	if($(this).attr('toast-time')){
+		time=$(this).attr('toast-time');
+	}
+	M.toast({text:data, displayLength:time});
+});
+
+$('body').on('click','.popup-trigger',function(){
+	var height=700;
+	var width=800;
+	var name='standaloneWindow';
+	if($(this).attr('popup-height')){
+		height=$(this).attr('popup-height');
+	}
+	if($(this).attr('popup-width')){
+		width=$(this).attr('popup-width');
+	}
+	if($(this).attr('popup-name')){
+		name=$(this).attr('popup-name');
+	}
+	var url=$(this).attr('adress');
+	window.open(url,name, 'height='+height+',width='+width+',toolbar=no,location=no,status=no,menubar=no,scrollbars=yes,resizable=yes');		
+});
+
+	M.Modal.init(document.querySelectorAll('.modal'), {
+		dismissible:false
+    });
+
+	function closeModals(){
+
+		var instance=M.Modal.getInstance($('#modal-bottom'));
+		if(instance)instance.close();
+		var instance=M.Modal.getInstance($('#modal-fixed'));
+		if(instance)instance.close();
+		var instance=M.Modal.getInstance($('#modal'));
+		if(instance)instance.close();
+	}
+</script>
+[@footer]
+[@/body]
+</html>
