@@ -110,8 +110,8 @@ Dᴇᴠᴇʟᴏᴘᴇᴅ ʙʏ Kᴀᴍɪʟ Sᴢʏᴍᴄᴢᴀᴋ ғᴏʀ Iɴᴅɪ
 	}
 
 	private function loadTemplates():void{
-		$this->headerStr=file_get_contents('/includes/html/material/header.html');
-		$this->footerStr=file_get_contents('/includes/html/material/footer.html');
+		$this->headerStr=file_get_contents(__DIR__.'/html/material/header.html');
+		$this->footerStr=file_get_contents(__DIR__.'/html/material/footer.html');
 	}
 
 	

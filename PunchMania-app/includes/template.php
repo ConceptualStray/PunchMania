@@ -1,8 +1,5 @@
 <?php
 
-use DateTime;
-use ErrorException;
-
 abstract class template{
 	
 	protected $string;
