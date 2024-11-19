@@ -1,0 +1,31 @@
+
+document.addEventListener('DOMContentLoaded', function() {
+	var elems = document.querySelectorAll('.carousel');
+	M.Carousel.init(elems, {
+		onCycleTo:activeTileCallback,
+		padding: -350
+	});
+});
+
+let timeoutId;
+function activeTileCallback(el) {
+	if (timeoutId) {
+		clearTimeout(timeoutId);
+	}
+	$('#progressBar').removeClass('hide');
+	$('#content').addClass('hide');
+	timeoutId = setTimeout(() => {
+		var id = $(el).attr('songId');
+		$.get('/controls.php?id=' + id, function(data){
+			$('#content').html(data);
+			$('#content').removeClass('hide');
+			$('#progressBar').addClass('hide');
+		});
+	}, 700);
+}
+
+
+$('body').on('input','#offset', function(){
+	var offset = $(this).val();
+	$('#offsetValue').html(offset);
+});
