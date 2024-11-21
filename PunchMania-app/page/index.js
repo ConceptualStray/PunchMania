@@ -29,3 +29,10 @@ $('body').on('input','#offset', function(){
 	var offset = $(this).val();
 	$('#offsetValue').html(offset);
 });
+
+document.addEventListener('range-changed', (e) => {
+	const data = e.detail;
+	$('#startTime').val(data.minRangeValue);
+	$('#endTime').val(data.maxRangeValue);
+	// data = { sliderId: null, minRangeValue: 0, maxRangeValue: 1000 }
+  });

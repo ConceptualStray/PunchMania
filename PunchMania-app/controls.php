@@ -28,6 +28,7 @@ $body->set('bpm',$bpm);
 $body->set('tNotes',$totalCount);
 $body->set('endTime',$endTime/1000);
 $body->set('totalTimeInt',$totalTime/1000);
+$body->set('id',$id);
 
 //convert totalTime in seconds to minutes:seconds
 $totalTime=round($totalTime/1000);

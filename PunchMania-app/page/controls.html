@@ -1,73 +1,78 @@
-<!-- 
-<div class="row">
-	<div class="col s4">
-		<label for="songName">Nazwa</label><br>
-		<span id="songName">[@name]</span>
+<form method="post" action="start.php">
+	<!-- 
+	<div class="row">
+		<div class="col s4">
+			<label for="songName">Nazwa</label><br>
+			<span id="songName">[@name]</span>
+		</div>
+		<div class="col s4">
+			<label for="album">Album/EP</label><br>
+			<span id="album">[@album]</span>
+		</div>
+		<div class="col s4">
+			<label for="artist">Wykonawca</label><br>
+			<span id="artist">[@artist]</span>
+		</div>
+	</div> -->
+	<div class="row">
+		<div class="col s4">
+			<label for="bpm">BPM</label><br>
+			<span id="bpm">[@bpm]</span>	
+		</div>
+		<div class="col s4">
+			<label for="duration">Długość</label><br>
+			<span id="duration">[@totalTime]</span>	
+		</div>
+		<div class="col s4">
+			<label for="tNotes">Ilość uderzeń</label><br>
+			<span id="tNotes">[@tNotes]</span>	
+		</div>
 	</div>
-	<div class="col s4">
-		<label for="album">Album/EP</label><br>
-		<span id="album">[@album]</span>
+	<div class="row">
+		<input type="hidden" name="id" value="[@id]" />
+		<div class="divider"></div>
+		<div class="col s6">
+			<p>
+				<label>
+					<input type="checkbox" class="filled-in" name="allowDoubles" value="1" checked="checked" />
+					<span>Zezwól na powtórzenia</span>
+				</label>
+			</p>
+		</div>
+		<div class="col s6">
+			<p class="range-field">
+				<label for="offset">Przesunięcie czasowe <span id="offsetValue">[@offset]</span> ms</label>
+				<input id="offset" name="offset" type="range" step="margin-top: 0;" value="[@offset]" id="offset" min="-150" max="150" />
+				
+			</p>
+		</div>
+		<div class="col s12">
+			<input type="hidden" name="startTime" id="startTime" value="[@startTime]" />
+			<input type="hidden" name="endTime" id="endTime" value="[@totalTimeInt]" />
+			<label for="durationSelector" style="position: relative;top: 1em; ">Zakres czasowy</label>
+			<range-selector
+				id="durationSelector"
+				min-label="songStart"
+				max-label="songEnd"
+				preset-min="[@startTime]" 
+				preset-max="[@endTime]" 
+				min-range="0"
+				max-range="[@totalTimeInt]"
+				number-of-legend-items-to-show="6"
+				hide-legend
+				slider-color="#006064"
+				label-font-weight="100"
+		/>
+		</div>
 	</div>
-	<div class="col s4">
-		<label for="artist">Wykonawca</label><br>
-		<span id="artist">[@artist]</span>
-	</div>
-</div> -->
-<div class="row">
-	<div class="col s4">
-		<label for="bpm">BPM</label><br>
-		<span id="bpm">[@bpm]</span>	
-	</div>
-	<div class="col s4">
-		<label for="duration">Długość</label><br>
-		<span id="duration">[@totalTime]</span>	
-	</div>
-	<div class="col s4">
-		<label for="tNotes">Ilość uderzeń</label><br>
-		<span id="tNotes">[@tNotes]</span>	
-	</div>
-</div>
-<div class="row">
-	<div class="divider"></div>
-	<div class="col s6">
-		<p>
-			<label>
-				<input type="checkbox" class="filled-in" checked="checked" />
-				<span>Zezwól na powtórzenia</span>
-			</label>
-		</p>
-	</div>
-	<div class="col s6">
-		<p class="range-field">
-			<label for="offset">Przesunięcie czasowe <span id="offsetValue">[@offset]</span> ms</label>
-			<input id="offset" name="offset" type="range" step="margin-top: 0;" value="[@offset]" id="offset" min="-150" max="150" />
+	<div class="row"></div>
+	<div class="row">
+		<div class="col s6">
+			<button type="submit" class="blue btn waves-effect waves-light col s12" id="saveButton">Start <span class="material-symbols-outlined right">play_arrow</span></button>
 			
-		</p>
+		</div>
+		<div class="col s6">
+			<a href="#!" class="green btn waves-effect waves-light col s12" id="saveButton">Posłuchaj<span class="material-symbols-outlined right">headphones</span></a>
+		</div>
 	</div>
-	<div class="col s12">
-		<label for="durationSelector" style="position: relative;top: 1em; ">Zakres czasowy</label>
-		<range-selector
-			id="durationSelector"
-			min-label="songStart"
-			max-label="songEnd"
-			preset-min="[@startTime]" 
-			preset-max="[@endTime]" 
-			min-range="0"
-			max-range="[@totalTimeInt]"
-			number-of-legend-items-to-show="6"
-			hide-legend
-			slider-color="#006064"
-			label-font-weight="100"
-	  />
-	</div>
-</div>
-<div class="row"></div>
-<div class="row">
-	<div class="col s6">
-		<button type="submit" class="btn waves-effect waves-light col s12" id="saveButton">Start <span class="material-symbols-outlined right">play_arrow</span></button>
-		
-	</div>
-	<div class="col s6">
-		<a href="#!" class="btn waves-effect waves-light col s12" id="saveButton">Posłuchaj<span class="material-symbols-outlined right">headphones</span></a>
-	</div>
-</div>
+</form>

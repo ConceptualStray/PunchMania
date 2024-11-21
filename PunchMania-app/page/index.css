@@ -132,3 +132,62 @@ input[type="range"]{
 .material-symbols-outlined.large {
 	font-size: 6rem;
 }
+
+
+.cd {
+    width: 200px; /* Adjust the size as needed */
+    height: 200px;
+    position: relative;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.cd-inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    animation: spin 5s linear infinite;
+}
+
+.cd-front, .cd-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    backface-visibility: hidden;
+}
+
+.cd-front img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cd-hole {
+    width: 30px; /* Adjust the size of the hole as needed */
+    height: 30px;
+    background: black; /* Color of the hole */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Ensure the hole is above the image */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
