@@ -1,0 +1,193 @@
+.card-title{
+	width: 100%;
+	background-color: #00000098;
+	padding: 0px 0px 10px 0!important;
+	text-align: center;
+	font-weight: unset!important;
+}
+
+.carousel .carousel-item img {
+	width: 100%; /* Adjust the width as needed */
+	height: 100%; /* Make height equal to width for a square */
+	max-width: 400px; /* Set a maximum width if needed */
+	max-height: 400px; /* Set a maximum height if needed */
+	object-fit: cover;
+}
+
+.carousel .carousel-item{
+	width: 400px;
+	height: 400px;
+}
+
+/* //permament nightmode */
+body{
+	background-color: #212121;
+	color: #e0e0e0;
+}
+
+.hide{
+	display: none!important;
+}
+
+#controlsPanel{
+	margin-top: 2em;
+}
+
+.range-field{
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+#offset{
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+input[type="range"]{
+	border: none;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 1,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 24
+}
+
+
+.material-symbols-outlined.right {
+	float: right;
+	margin-left: 15px;
+}
+
+.material-symbols-outlined.left {
+	float: left;
+	margin-right: 15px;
+}
+
+.btn .material-symbols-outlined,
+.btn-floating .material-symbols-outlined,
+.btn-large .material-symbols-outlined,
+.btn-small .material-symbols-outlined,
+.btn-flat .material-symbols-outlined {
+	font-size: 1.3rem;
+	line-height: inherit;
+}
+
+.btn-small.col>.material-symbols-outlined.right,
+.btn-large.col>.material-symbols-outlined.right,
+.btn-small.col>.material-symbols-outlined.left,
+.btn-large.col>.material-symbols-outlined.left,
+.btn.col>.material-symbols-outlined.right,
+.btn.col>.material-symbols-outlined.left {
+	position: relative;
+	width: 0;
+
+}
+
+.btn-small.col>.material-symbols-outlined.right,
+.btn-large.col>.material-symbols-outlined.right,
+.btn.col>.material-symbols-outlined.right {
+	right: 1em;
+	margin-left: 0
+}
+
+.btn-small.col>.material-symbols-outlined.left,
+.btn-large.col>.material-symbols-outlined.left,
+.btn.col>.material-symbols-outlined.left {
+	left: 1em;
+	margin-right: 0;
+}
+
+
+
+.material-symbols-outlined {
+	text-rendering: optimizeLegibility;
+	-webkit-font-feature-settings: "liga";
+	-moz-font-feature-settings: "liga";
+	font-feature-settings: "liga";
+}
+
+
+.btn-floating.btn-large .material-symbols-outlined {
+	line-height: 56px;
+}
+
+.btn-large .material-symbols-outlined {
+	font-size: 1.6rem;
+}
+
+.btn-floating .material-symbols-outlined {
+	width: inherit;
+	display: inline-block;
+	text-align: center;
+	color: #fff;
+	font-size: 1.6rem;
+	line-height: 40px;
+}
+
+
+
+.material-symbols-outlined.large {
+	font-size: 6rem;
+}
+
+
+.cd {
+    width: 200px; /* Adjust the size as needed */
+    height: 200px;
+    position: relative;
+    margin: 0 auto;
+    border-radius: 50%;
+    overflow: hidden;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+}
+
+.cd-inner {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    animation: spin 5s linear infinite;
+}
+
+.cd-front, .cd-back {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    border-radius: 50%;
+    backface-visibility: hidden;
+}
+
+.cd-front img {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+.cd-hole {
+    width: 30px; /* Adjust the size of the hole as needed */
+    height: 30px;
+    background: black; /* Color of the hole */
+    border-radius: 50%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1; /* Ensure the hole is above the image */
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

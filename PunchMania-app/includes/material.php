@@ -2,8 +2,7 @@
 
 
 class material extends template{
-	protected $headerUrls='
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">';
+	protected $headerUrls='';
 	protected $footerUrls='';
 	protected $headerStr='';
 	protected $footerStr='';

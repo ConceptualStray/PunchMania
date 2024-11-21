@@ -1,17 +1,20 @@
 <?php
 
-require_once 'includes/template.php';
-require_once 'includes/material.php';
-require_once 'includes/templateFromFile.php';
+//check in /state folder if we have a file named <id>.state
+//if we have, we are playing
 
-$page=new material('test');
+//scan the dir
+$states=scandir('state');
+foreach($states as $state){
+	if($state=='.' || $state=='..') continue;
+	//check if the file is a state file
+	if(preg_match('/\d+\.state/',$state)){
+		//get the id from the file
+		$__id=explode('.',$state)[0];
+		require_once 'playing.php';
+		exit;
+	}
+}
 
-$url = 'http://192.168.1.20:8000/start.php'; 
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, false); 
-curl_setopt($ch, CURLOPT_TIMEOUT, 1); 
-curl_exec($ch);
-curl_close($ch);
+require_once 'picker.php';
 
-$page->setBody('no response');
-echo $page;
