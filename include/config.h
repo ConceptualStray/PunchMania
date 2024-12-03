@@ -10,25 +10,33 @@
 
 #define DURATION_LED_MAIN 500  // 0.3 seconds in milliseconds
 
-
+const int PAD_TO_PIN[6][2]={
+	{0,2},
+	{1,3},
+	{2,4},
+	{3,5},
+	{4,5},
+	{5,7}
+	};
 
 int TIME_SCAN_AHEAD=1000;
+int POINTS=0;
 long TIME_START=0;
 long TIME_NOTES_AGGREGATED=0;
 
 int DURATION_LED_SUB=TIME_SCAN_AHEAD/8;
 
 
-const char* validCommandPointers[] = {
-	"s",//start playing
-	"c",//clear memory
-	"e",//end playing
-	"o",//offset
-	"n",//notes
-	"l",//toggle leds
-	"d",//debug active leds
+// const char* validCommandPointers[] = {
+// 	"s",//start playing
+// 	"p",//get points
+// 	"e",//end playing
+// 	"o",//offset
+// 	"n",//notes
+// 	"l",//toggle leds
+// 	"d",//debug active leds
 
-};
+// };
 
 
 const int ledIds[6][8] = {

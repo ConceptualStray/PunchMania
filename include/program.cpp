@@ -80,12 +80,18 @@ void deregisterActivePad(int8_t groupId){
 void run(){
 	//6 is the number of groups/max active pads
 	for (size_t i = 0; i < 6; i++){
-		//int this loop we can also add later check for btn press
+
 		// and if it's pressed we can toggle the whole group off
-		if(activePads[i]!=-1 and activePads[i]<=now()){
+		if(activePads[i]!=-1){
 			// Serial.println("Toggling group "+String(i));
-			toggleLedOff(ledIds[i][7]);
-			deregisterActivePad(i);
+			long localnow=now();
+			if(activePads[i]<=localnow or (digitalRead(PAD_TO_PIN[i][1])==HIGH)){
+				//get ms time diff between now and the time the led should be turned off
+				//if greater than 0 we should award points based on time left, less time more points
+				POINTS+=DURATION_LED_MAIN-(activePads[i]-localnow);
+				toggleLedOff(ledIds[i][7]);
+				deregisterActivePad(i);
+			}
 		}
 	}
 	
@@ -101,19 +107,25 @@ void run(){
 
 	for (size_t i = 0; i < MAX_MEM_NOTES; i++){
 		Note note=notesInMem[i];
+		long localnow=now();
 		// Serial.println("Now: "+String(now())+", "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
 		if(note.timestamp<0)continue;
 		// Serial.println("Now: "+String(now())+", "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
 		// Serial.println("Changeover: "+String(note.changeOverTime));
-		if(note.timestamp<=now() and note.timestamp!=-1){
+		if(note.timestamp<=localnow and note.timestamp!=-1){
 			toggleLedOff(getLedId(note.groupId, note.ledId));
 			//toggle on the last led
 			toggleLedOn(getLedId(note.groupId, 7));
 			// Serial.println("Done: "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
 			registerActivePad(note.groupId);
+			
+			//notify controller app about "played" note and free global mem slot
+			//return 2 to indicate that the note has been played, bc 1 is "understood" and 0 "not understood"
+			Serial.println(2);
+
 			purgeNoteFromMemory(i);
 			continue;
-		}else if(note.changeOverTime<=now()){
+		}else if(note.changeOverTime<=localnow){
 			if(note.ledId!=-1){
 				//if we are not at the beginning of the group, turn off the previous led
 				toggleLedOff(getLedId(note.groupId,note.ledId));

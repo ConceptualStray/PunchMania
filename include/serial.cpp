@@ -16,12 +16,12 @@ void testpopulate(){
 }
 
 void clearMemory(){
-	for(int i=0;i<MAX_NOTES;i++){
-		// Note note;
-		// note.timestamp=-1;
-		// notesInMem[i]=note;
-	}
 	for(int i=0;i<MAX_MEM_NOTES;i++){
+		Note note;
+		note.timestamp=-1;
+		notesInMem[i]=note;
+	}
+	for(int i=0;i<MAX_NOTES;i++){
 		notes[i]=-1;
 	}
 	
@@ -65,22 +65,8 @@ void readSerial(){
         char incomingByte = Serial.read();
         if (incomingByte == '\n') {
             commandBuffer[commandIndex] = '\0'; // Null-terminate the command
-            bool validCommandPointer = false;
-            for (int i = 0; i < sizeof(validCommandPointers); i++) {
-                if (strcmp(commandBuffer, validCommandPointers[i]) == 0) {
-                    validCommandPointer = true;
-                    break;
-                }
-            }
-
-            if (validCommandPointer) {
-                processCommand(commandBuffer[0], commandBuffer + 1);
-				cleanSerial();
-            } else {
-                Serial.print("e:");
-                Serial.println(commandBuffer);
-            }
-
+            processCommand(commandBuffer[0], commandBuffer + 1);
+			cleanSerial();
             commandIndex = 0; // Reset command buffer index
 			memset(commandBuffer, 0, sizeof(commandBuffer));
         } else {
@@ -96,30 +82,36 @@ void processCommand(char pointer, const char* commandValue) {
 
 	if(pointer=='s'){
 		isPlaying=true;
-		Serial.println(TIME_NOTES_AGGREGATED);
+		// Serial.println(TIME_NOTES_AGGREGATED);
+		Serial.println(1);
 		return;
 	}else if(pointer=='o'){
 		//set offset
 		OFFSET_NOTE=atof(commandValue)*1000;
+		Serial.println(1);
 		return;
-	}else if(pointer=='e'){
-		isPlaying=false;
+	}else if(pointer=='p'){
+		Serial.println(POINTS);
 		return;
 
 	}else if(pointer=='c'){
 		clearMemory();
+		Serial.println(1);
 		return;
 	}else if(pointer=='n'){
 		notes[totalNotesCnt]=atof(commandValue);
 		totalNotesCnt=(totalNotesCnt+1)%MAX_NOTES;
+		Serial.println(1);
 		return;
 	}else if(pointer=='l'){
 		//toggle led
 		toggleLed(atoi(commandValue));
+		Serial.println(1);
 		return;
 	}else if(pointer=='d'){
 		//toggle led
 		debugFunc();
+		Serial.println(1);
 		return;
 	}
 }
