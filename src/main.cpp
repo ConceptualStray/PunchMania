@@ -4,7 +4,18 @@
 #include "serial.cpp"
 #include "program.cpp"
 
-
+void selfTest(){
+	for(int i=0;i<6;i++){
+		toggleWholeGroup(i);
+		updateShiftRegisters();
+		delay(200);
+	}
+	delay(500);
+	for(int i=0;i<6;i++){
+		toggleWholeGroupOff(i);
+	}
+	updateShiftRegisters();
+}
 
 void setup(){
 	Serial.begin(250000);
@@ -23,8 +34,9 @@ void setup(){
 	}
 	testpopulate();
 
-	updateShiftRegisters();
+	selfTest();
 }
+
 
 
 
