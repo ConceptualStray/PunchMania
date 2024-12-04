@@ -26,6 +26,11 @@ void setup(){
 	pinMode(PIN_DATA, OUTPUT);
 	pinMode(PIN_CLOCK, OUTPUT);
 	pinMode(PIN_LATCH, OUTPUT);
+	
+	//set all btn pins to inuput
+	for(int i=0;i<6;i++){
+		pinMode(PAD_TO_PIN[i], INPUT);
+	}
 
 	clearMemory();
 
@@ -44,6 +49,8 @@ long lastCountDownTime = 0;
 int currentGroupId = 0;
 int prevGroupId=-1;
 void loop() {
+
+
 	readSerial();
 	if(isPlaying){
 		if(isInCountdown){

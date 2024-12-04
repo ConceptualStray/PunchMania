@@ -9,15 +9,18 @@
 #define START_SEQUENCE_DURATION 1500
 
 #define DURATION_LED_MAIN 500  // 0.3 seconds in milliseconds
+#define PAD_THRESHOLD 200
+const int PAD_TO_PIN[6]={
+	// A3,
+	// A0,
+	// A1,
+	// A2,
+	// A4,
+	// A5
+	A2,A1,A3,A0,A4,A5
+};
 
-const int PAD_TO_PIN[6][2]={
-	{0,2},
-	{1,3},
-	{2,4},
-	{3,5},
-	{4,5},
-	{5,7}
-	};
+
 
 int TIME_SCAN_AHEAD=1000;
 int POINTS=0;

@@ -85,7 +85,7 @@ void run(){
 		if(activePads[i]!=-1){
 			// Serial.println("Toggling group "+String(i));
 			long localnow=now();
-			if(activePads[i]<=localnow or (digitalRead(PAD_TO_PIN[i][1])==HIGH)){
+			if(activePads[i]<=localnow or (digitalRead(PAD_TO_PIN[i])==HIGH)){
 				//get ms time diff between now and the time the led should be turned off
 				//if greater than 0 we should award points based on time left, less time more points
 				POINTS+=DURATION_LED_MAIN-(activePads[i]-localnow);
