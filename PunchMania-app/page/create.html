@@ -1,0 +1,63 @@
+<input type="hidden" id="songId" value="[@id]">
+<div class="row">
+	<div class="col s6">
+		<div class="row" style="margin-bottom:0px">
+			<div class="input-field col s6">
+				<button class="btn waves-effect waves-light col s12 blue" id="playButton">Play</button>
+			</div>
+			<div class="input-field col s6">
+				<label for="volumeSlider" style="top: -20px;">Volume</label>
+				<input type="range" id="volumeSlider" min="0" max="100" value="100">
+			</div>
+		</div>
+		<div class="row " style="margin-top:0px;margin-bottom:0px">
+			<div class="input-field col s12" style="margin-top:0px">
+				<label id="offsetValue" for="offsetSlider" style="top: -20px;">Current offset: 0 ms</label>
+				<input type="range" id="offsetSlider" min="0" value="0">
+			</div>
+		</div>
+		<div class="row" style="margin-top: 0px; margin-bottom:0px">
+			<div class="col s6 input-field" style="margin-top:0px">
+				<p id="remainingTime">Remaining time: 0s</p>
+			</div>
+			<div class="col s6 input-field" style="margin-top:0px">
+				<p id="currentTime">Current time: 0 ms </p>
+			</div>
+
+		</div>
+		<div class="row" style="margin-top: 0px;margin-bottom:0px">
+			<div class="col s6 input-field" style="margin-top:0px">
+				<button class="btn red waves-effect waves-light col s12" id="stopButton">Stop</button>
+			</div>
+			<div class="col s6 input-field" style="margin-top:0px">
+				<button class="btn orange waves-effect waves-light col s12" id="pauseButton">Pause</button>
+			</div>
+		</div>
+		<div class="row" style="margin-top: 0px;margin-bottom:0px">
+			<div class="col s4 input-field">
+				<button class="blue btn waves-effect waves-light col s12" id="clearButton">Clear Timestamps</button>
+			</div>
+			<div class="col s6 input-field">
+				<button class="blue btn waves-effect waves-light col s12" id="selectAllButton">Select All Timestamps</button>
+			</div>
+			<div class="col s2 input-field">
+				<button class="blue btn waves-effect waves-light col s12" id="testButton">Test</button>
+			</div>
+		</div>
+        <audio id="audioPlayer">
+            Your browser does not support the audio element.
+        </audio>
+		<div class="row" style="margin-top: 0px;margin-bottom:0px">
+			<div id="blinkCircle" class="center" style="width: 50px; height: 50px; background-color: red; border-radius: 50%; visibility: hidden;"></div>
+		</div>
+      
+	</div>
+	<div class="col s6">
+		<div class="card-panel blue-grey darken-4">
+			<div id="logContainer" style=" max-height: 300px; overflow-y: auto;">
+				<!-- Log entries will appear here -->
+			</div>
+		</div>
+
+	</div>
+</div>
