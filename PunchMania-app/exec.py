@@ -81,18 +81,19 @@ pygame.mixer.music.play(start=timeStart/1000)
 pygame.time.delay(int(duration))  # delay in milliseconds
 pygame.mixer.music.fadeout(500)
 
-while notes:
-	while True:
-		if ino.readline().strip() == b'2':
-			break
-	while True:
-		ino.write(('n' + str(notes[0]) + '\n').encode())
-		response = ino.readline().strip()
-		if response == b'1':
-			del notes[0]
-			break
-		elif response == b'0':
-			ino.write(('n' + str(notes[i]) + '\n').encode())
+
+#we'll send the rest of the notes
+for note in notes:
+    while True:
+        if ino.readline().strip() == b'2':
+            break
+	ino.write(('n' + str(note) + '\n').encode())
+    while True:
+        response = ino.readline().strip()
+        if response == b'1':
+            break
+        elif response == b'0':
+            ino.write(('n' + str(note) + '\n').encode())
 
 #if all notes loaded then we wait for the song to finish
 while pygame.mixer.music.get_busy(): 
