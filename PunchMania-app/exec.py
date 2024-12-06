@@ -6,10 +6,10 @@ import configparser
 import pygame
 
 if len(sys.argv) > 1:
-	id = sys.argv[1]
+    id = sys.argv[1]
 else:
-	print("false")
-	exit()
+    print("false")
+    exit()
 
 
 COMID='COM10'
@@ -23,7 +23,7 @@ configFile=os.path.join(dirScript, './data/'+id, 'config.ini')
 notesFile=os.path.join(dirScript, './data/'+id, 'notes.ini')
 
 with open(configFile, 'r') as f:
-	config_string = '[default]\n' + f.read()
+    config_string = '[default]\n' + f.read()
 
 
 config = configparser.ConfigParser()
@@ -47,29 +47,29 @@ ino.write(('o'+str(offset)+'\n').encode())
 notes = []
 lastNoteTime=0
 with open(notesFile, 'r') as f:
-	for line in f:
-		#cast line to int
-		timestamp=int(line.strip());
-		if timestamp>=timeStart and timestamp<=timeEnd:
-			#calculate relative time between last note and this note
-			relativeTime=timestamp-lastNoteTime
-			lastNoteTime=timestamp
-			notes.append(relativeTime)
+    for line in f:
+        #cast line to int
+        timestamp=int(line.strip());
+        if timestamp>=timeStart and timestamp<=timeEnd:
+            #calculate relative time between last note and this note
+            relativeTime=timestamp-lastNoteTime
+            lastNoteTime=timestamp
+            notes.append(relativeTime)
 
 
 
 
 #load first 100 notes
 for i in range(min(100, len(notes))):
-	ino.write(('n' + str(notes[i]) + '\n').encode())
-	while True:
-		response = ino.readline().strip()
-		if response == b'1':
-			del notes[i]
-			break
-		elif response == b'0':
-			ino.write(('n' + str(notes[i]) + '\n').encode())
-	
+    ino.write(('n' + str(notes[i]) + '\n').encode())
+    while True:
+        response = ino.readline().strip()
+        if response == b'1':
+            del notes[i]
+            break
+        elif response == b'0':
+            ino.write(('n' + str(notes[i]) + '\n').encode())
+    
 
 #here we start playing music and send the start key to ino
 pygame.mixer.init()
@@ -87,7 +87,7 @@ for note in notes:
     while True:
         if ino.readline().strip() == b'2':
             break
-	ino.write(('n' + str(note) + '\n').encode())
+    ino.write(('n' + str(note) + '\n').encode())
     while True:
         response = ino.readline().strip()
         if response == b'1':
@@ -108,4 +108,4 @@ time.sleep(1)
 points = ino.readline().strip().decode()
 
 with open(os.path.join(dirScript, './points', id+'.score'), 'w') as f:
-	f.write(points)
+    f.write(points)
