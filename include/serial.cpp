@@ -9,11 +9,11 @@ long now(){
 	return millis()-TIME_START-OFFSET_NOTE;
 }
 
-void testpopulate(){
-	for(int i=0;i<70;i++){
-		notes[i]=700;
-	}
-}
+// void testpopulate(){
+// 	for(int i=0;i<70;i++){
+// 		notes[i]=700;
+// 	}
+// }
 
 void clearMemory(){
 	for(int i=0;i<MAX_MEM_NOTES;i++){
@@ -83,6 +83,8 @@ void processCommand(char pointer, const char* commandValue) {
 	if(pointer=='s'){
 		isPlaying=true;
 		// Serial.println(TIME_NOTES_AGGREGATED);
+		TIME_START=millis()-OFFSET_SERIAL;
+		TIME_NOTES_AGGREGATED=now();
 		Serial.println(1);
 		return;
 	}else if(pointer=='o'){
@@ -94,12 +96,24 @@ void processCommand(char pointer, const char* commandValue) {
 		Serial.println(POINTS);
 		return;
 
-	}else if(pointer=='c'){
-		clearMemory();
+	}else if(pointer=='r'){
+		//reset
+		isPlaying=false;
+		for(int i=0;i<6;i++){
+			toggleWholeGroupOff(i);
+		}
+		for(int i=0;i<MAX_MEM_NOTES;i++){
+			Note note;
+			note.timestamp=-1;
+			notesInMem[i]=note;
+		}
+		for(int i=0;i<MAX_NOTES;i++){
+			notes[i]=-1;
+		}
 		Serial.println(1);
 		return;
 	}else if(pointer=='n'){
-		notes[totalNotesCnt]=atof(commandValue);
+		notes[totalNotesCnt]=atoi(commandValue);
 		totalNotesCnt=(totalNotesCnt+1)%MAX_NOTES;
 		Serial.println(1);
 		return;

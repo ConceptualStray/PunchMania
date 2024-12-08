@@ -5,12 +5,12 @@
 #include "program.cpp"
 
 void selfTest(){
-	for(int i=0;i<6;i++){
-		toggleWholeGroup(i);
-		updateShiftRegisters();
-		delay(200);
-	}
-	delay(500);
+	// for(int i=0;i<6;i++){
+	// 	toggleWholeGroup(i);
+	// 	updateShiftRegisters();
+	// 	delay(200);
+	// }
+	// delay(500);
 	for(int i=0;i<6;i++){
 		toggleWholeGroupOff(i);
 	}
@@ -37,7 +37,7 @@ void setup(){
 	for(int i=0;i<6;i++){
 		toggleWholeGroupOff(i);
 	}
-	testpopulate();
+	// testpopulate();
 
 	selfTest();
 }
@@ -53,24 +53,9 @@ void loop() {
 
 	readSerial();
 	if(isPlaying){
-		if(isInCountdown){
-			float groupTime=(START_SEQUENCE_DURATION)/6;
-            if (millis() - lastCountDownTime >= groupTime) {
-				if(currentGroupId < 6)toggleWholeGroup(currentGroupId);  
-				if(prevGroupId != -1)toggleWholeGroup(prevGroupId);        
-                lastCountDownTime = millis();
-				prevGroupId=currentGroupId;
-                currentGroupId = (currentGroupId + 1);
-                if (currentGroupId == 7){
-					isInCountdown = false;
-					TIME_START=millis()-OFFSET_SERIAL;
-					TIME_NOTES_AGGREGATED=now();
-				}
-			}
-		}else{
-			run();
-		}
+		run();
+		updateShiftRegisters();
 	}
-	updateShiftRegisters();
+	
 }
 

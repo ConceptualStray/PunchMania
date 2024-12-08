@@ -155,7 +155,8 @@ document.addEventListener('keydown', function(event) {
 
         let logContainer = document.getElementById('logContainer');
         let logEntry = document.createElement('div');
-        logEntry.textContent = `${currentTimeMs}:${timeSinceLastPress}`;
+        logEntry.textContent = `${currentTimeMs}`;
+        // logEntry.textContent = `${currentTimeMs}:${timeSinceLastPress}`;
         logContainer.appendChild(logEntry);
 
         // Scroll to the bottom to show the latest entry

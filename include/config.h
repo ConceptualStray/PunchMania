@@ -3,7 +3,7 @@
 #define PIN_LATCH 12 // Latch Pin
 #define OFFSET_SERIAL 0 
 
-#define MAX_NOTES 200
+#define MAX_NOTES 50
 #define MAX_MEM_NOTES 24
 
 #define START_SEQUENCE_DURATION 1500
@@ -54,7 +54,7 @@ const int ledIds[6][8] = {
 bool isPlaying=false;
 bool isInCountdown=true;
 
-bool allowDoubles=true;
+bool allowDoubles=false;
 bool flipSides=false;
 int disabledIds[6]={0};
 
@@ -62,7 +62,7 @@ int disabledIds[6]={0};
 unsigned long OFFSET_NOTE=0;
 
 
-int notes[MAX_NOTES];
+uint32_t notes[MAX_NOTES];
 byte shiftRegisterState[6] = {0}; // Each byte controls 8 outputs
 uint8_t totalNotesCnt=0;
 

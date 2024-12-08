@@ -17,7 +17,7 @@ $config['duration']=$timeSongEnd-$timeSongStart;
 //write to config.ini
 $fp=fopen($configFile,'w');
 foreach($config as $key=>$value){
-	$value='\''.$value.'\'';
+	// $value='\''.$value.'\'';
 	fwrite($fp,$key.'='.$value.PHP_EOL);
 }
 fclose($fp);
@@ -25,12 +25,12 @@ fclose($fp);
 //then create state file to start playing and launch the py script to sync data to ino
 $stateFile='state/'.$id.'.state';
 $fp=fopen($stateFile,'w');
+
+$pyWorker=popen('start /B py exec.py '.$id, "r");
+
 fwrite($fp,1);	
 fclose($fp);
-
-//launch py script
-exec('python3 sync.py '.$id.' > /dev/null 2>/dev/null &');
-
+pclose($pyWorker);
 
 //redirect back to index
 header('Location: index.php');

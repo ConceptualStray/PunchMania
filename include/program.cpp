@@ -18,19 +18,19 @@ void purgeNoteFromMemory(int index) {
 
 void loadNotesIntoMemory() {
 
-	int hasSpaceOffset=0;
+
 	int availableSpace=0;
 
 
 	for (size_t i = 0; i < MAX_MEM_NOTES; i++) {
 		if (notesInMem[i].timestamp == -1) {
-			hasSpaceOffset++;
+
 			availableSpace++;
 			continue;
 		}
-		if (hasSpaceOffset > 0) {
-			int offsetIndex = i - hasSpaceOffset;
-			// hasSpaceOffset--;
+		if (availableSpace > 0) {
+			int offsetIndex = i - availableSpace;
+
 			if (offsetIndex >= 0) {
 				notesInMem[offsetIndex] = notesInMem[i];
 				purgeNoteFromMemory(i);
@@ -62,7 +62,10 @@ void loadNotesIntoMemory() {
 
 			memoryIndex++;
 			lastNotesIndex=(i+1)%MAX_NOTES;
-			
+
+			//notify controller app about "played" note and free global mem slot
+			//return 2 to indicate that the note has been played, bc 1 is "understood" and 0 "not understood"
+			Serial.println(2);
 			
 		}
 	}
@@ -90,7 +93,7 @@ void run(){
 				//if greater than 0 we should award points based on time left, less time more points
 				int pointsToAward=localnow-activePads[i];
 				POINTS+=pointsToAward;
-				Serial.println("Points: "+String(pointsToAward));
+				// Serial.println("Points: "+String(pointsToAward));
 				toggleLedOff(ledIds[i][7]);
 				deregisterActivePad(i);
 			}
@@ -121,10 +124,6 @@ void run(){
 			// Serial.println("Done: "+String(i)+": Timestamp: "+String(note.timestamp)+", LedId: "+String(note.ledId)+",GroupId:  "+String(note.groupId)+", ChangeoverTime: "+String(note.changeOverTime));
 			registerActivePad(note.groupId);
 			
-			//notify controller app about "played" note and free global mem slot
-			//return 2 to indicate that the note has been played, bc 1 is "understood" and 0 "not understood"
-			Serial.println(2);
-
 			purgeNoteFromMemory(i);
 			continue;
 		}else if(note.changeOverTime<=localnow){
