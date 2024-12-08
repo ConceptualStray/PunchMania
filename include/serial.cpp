@@ -11,7 +11,7 @@ long now(){
 
 void testpopulate(){
 	for(int i=0;i<70;i++){
-		notes[i]=1000;
+		notes[i]=700;
 	}
 }
 

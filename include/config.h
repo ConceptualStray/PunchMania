@@ -23,7 +23,7 @@ const int PAD_TO_PIN[6]={
 
 
 int TIME_SCAN_AHEAD=1000;
-int POINTS=0;
+long POINTS=0;
 long TIME_START=0;
 long TIME_NOTES_AGGREGATED=0;
 
