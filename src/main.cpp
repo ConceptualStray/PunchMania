@@ -5,12 +5,12 @@
 #include "program.cpp"
 
 void selfTest(){
-	// for(int i=0;i<6;i++){
-	// 	toggleWholeGroup(i);
-	// 	updateShiftRegisters();
-	// 	delay(200);
-	// }
-	// delay(500);
+	for(int i=0;i<6;i++){
+		toggleWholeGroup(i);
+		updateShiftRegisters();
+		delay(100);
+	}
+	delay(300);
 	for(int i=0;i<6;i++){
 		toggleWholeGroupOff(i);
 	}
@@ -34,9 +34,9 @@ void setup(){
 
 	clearMemory();
 
-	for(int i=0;i<6;i++){
-		toggleWholeGroupOff(i);
-	}
+	// for(int i=0;i<6;i++){
+	// 	toggleWholeGroupOff(i);
+	// }
 	// testpopulate();
 
 	selfTest();
@@ -49,8 +49,6 @@ long lastCountDownTime = 0;
 int currentGroupId = 0;
 int prevGroupId=-1;
 void loop() {
-
-
 	readSerial();
 	if(isPlaying){
 		run();

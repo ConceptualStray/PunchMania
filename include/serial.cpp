@@ -86,6 +86,9 @@ void processCommand(char pointer, const char* commandValue) {
 		TIME_START=millis()-OFFSET_SERIAL;
 		TIME_NOTES_AGGREGATED=now();
 		Serial.println(1);
+		for(int i=0;i<6;i++){
+			toggleWholeGroupOff(i);
+		}
 		return;
 	}else if(pointer=='o'){
 		//set offset
@@ -116,6 +119,10 @@ void processCommand(char pointer, const char* commandValue) {
 		notes[totalNotesCnt]=atoi(commandValue);
 		totalNotesCnt=(totalNotesCnt+1)%MAX_NOTES;
 		Serial.println(1);
+		if(isPlaying==false and totalNotesCnt<48){
+			toggleLedOn(totalNotesCnt);
+			updateShiftRegisters();
+		}
 		return;
 	}else if(pointer=='l'){
 		//toggle led
@@ -124,9 +131,11 @@ void processCommand(char pointer, const char* commandValue) {
 		return;
 	}else if(pointer=='d'){
 		//toggle led
-		debugFunc();
+		lastNoteDance();
 		Serial.println(1);
 		return;
+	}else if(pointer=='c'){
+		randomSeed(atoi(commandValue));
 	}
 }
 

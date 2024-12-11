@@ -4,14 +4,15 @@ import os
 import time
 import configparser
 import pygame
+import random
 
-# if len(sys.argv) > 1:
-#     id = sys.argv[1]
-# else:
-#     print("false")
-#     exit()
+if len(sys.argv) > 1:
+    id = sys.argv[1]
+else:
+    print("false")
+    exit()
 
-id=1
+# id=1.l
 
 COMID='COM7'
 BAUDRATE=250000
@@ -44,6 +45,7 @@ ino.write(('o'+str(offset)+'\n').encode())
 
 notes = []
 lastNoteTime=0
+firstCumulative=0;
 with open(notesFile, 'r') as f:
     for line in f:
         #cast line to int
@@ -60,6 +62,17 @@ if(lastNoteTime<timeEnd):
 
 time.sleep(3)
 initLoops=49;
+
+#gen random int
+random.seed(time.time())
+seed=random.random();
+#cast that float to int
+seed=int(seed*1000000);
+
+ino.write(('c'+str(seed)+'\n').encode())
+
+
+
 if(len(notes)<initLoops):
 	initLoops=len(notes)
 #load first x notes
@@ -121,7 +134,11 @@ while True:
         break
 
 print("Song ended")
-pygame.mixer.music.fadeout(10000)
+pygame.mixer.music.fadeout(7000)
+
+time.sleep(3)
+ino.write(('d\n').encode())
+time.sleep(4)
 #if song ended delete the {id}.state file from /state dir
 os.remove(os.path.join(dirScript, './state', id+'.state'))
 #get points from ino and write to id.score file in /state dir

@@ -79,3 +79,38 @@ void toggleWholeGroup(int groupId){
 	}
 	// if(debug)Serial.println("Toggling group "+String(groupId));
 }
+
+
+void lastNoteDance() {
+	//we toggle each sequential led on each group
+	for (size_t i = 0; i < 8; i++) {
+		for(size_t j=0;j<6;j++){
+			toggleLed(ledIds[j][i]);
+		}
+		updateShiftRegisters();
+		delay(100);
+	}
+
+
+	//do a while group blink blink 3 times
+	for (size_t i = 0; i < 6; i++) {
+		for(size_t j=0;j<6;j++){
+			toggleWholeGroup(j);
+		}
+		updateShiftRegisters();
+		delay(200);
+		
+	}
+
+
+	//the same but other way around
+	for (size_t i = 0; i < 8; i++) {
+		for(size_t j=0;j<6;j++){
+			toggleLedOff(ledIds[j][i]);
+		}
+		delay(100);
+		updateShiftRegisters();
+		
+	}
+
+}
