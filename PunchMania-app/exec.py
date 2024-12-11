@@ -38,22 +38,42 @@ timeEnd = timeStart+duration
 offset=int(config['offset'])
 scanAhead=int(config['scanAhead'])
 allowDoubles=int(config['allowDoubles'])
+skipBeats=False
 
 ino.write(('o'+str(offset)+'\n').encode())
 #we can add support for rest of config later in development
 
 notes = []
 lastNoteTime=0
+accumulatedTime = 0
+accumulate = True
+counter=0
+
 with open(notesFile, 'r') as f:
     for line in f:
-        #cast line to int
-        timestamp=int(line.strip());
-        if timestamp>=timeStart and timestamp<=timeEnd:
-            #calculate relative time between last note and this note
-            relativeTime=timestamp-lastNoteTime
-            lastNoteTime=timestamp
-            # print(f"Converting {timestamp} to int: {relativeTime}")
-            notes.append(relativeTime)
+        
+		counter+=1
+		if skipBeats and counter%2==0 :
+			continue
+        timestamp = int(line.strip())
+        if timestamp >= timeStart and timestamp <= timeEnd:
+            # Calculate relative time between last note and this note
+            relativeTime = timestamp - lastNoteTime + accumulatedTime
+            lastNoteTime = timestamp
+            
+            if accumulate:
+                if relativeTime < scanAhead:
+                    accumulatedTime = relativeTime
+                else:
+                    notes.append(relativeTime)
+                    accumulatedTime = 0
+                    accumulate = False  # Stop accumulating after the first valid relativeTime
+            else:
+                notes.append(relativeTime)
+
+		
+
+
 
 if(lastNoteTime<timeEnd):
     timeEnd=lastNoteTime
@@ -86,7 +106,7 @@ pygame.mixer.music.load(songFile)
 
 ino.write(('s\n').encode())
 # time.sleep(1.5)
-pygame.mixer.music.play(start=timeStart/1000)
+pygame.mixer.music.play(start=((timeStart/1000)-5000),fade_ms=5000)
 #get now in ms
 startTime=time.time()*1000
 
