@@ -178,3 +178,22 @@ function updateCurrentTime() {
     var currentTimeMs = Math.floor(audioPlayer.currentTime * 1000); // Convert seconds to ms
     document.getElementById('currentTime').textContent = `Current time: ${currentTimeMs} ms`;
 }
+
+
+//get status from statusCheck.php every 2 seconds
+setInterval(function() {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', 'statusCheck.php', true);
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState === 4 && xhr.status === 200) {
+			var status = xhr.responseText;
+			if (status === 'true') {
+				//do nothing
+			} else {
+				//redirect to index.php
+				window.location.href = 'index.php';
+			}
+		}
+	};
+	xhr.send();
+}, 2000);
