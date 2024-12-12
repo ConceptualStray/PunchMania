@@ -4,8 +4,7 @@ require_once '../includes/template.php';
 require_once '../includes/material.php';
 require_once '../includes/templateFromFile.php';
 
-//just redefine it here so IDE won't complain
-$id=$__id;
+$id=$_GET['id'];
 
 
 $page=new material();

@@ -11,7 +11,7 @@ foreach($states as $state){
 	if(preg_match('/\d+\.state/',$state)){
 		//get the id from the file
 		$__id=explode('.',$state)[0];
-		header('Location: control/playing.php');
+		header('Location: control/playing.php?id='.$__id);
 		exit;
 	}
 }

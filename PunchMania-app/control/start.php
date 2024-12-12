@@ -2,7 +2,7 @@
 $id=$_POST['id'];
 
 $offset=$_POST['offset'];
-$allowDoubles=$_POST['allowDoubles'];
+$allowDoubles=$_POST['allowDoubles']??'false';
 $timeSongStart=$_POST['startTime']*1000;
 $timeSongEnd=$_POST['endTime']*1000;
 
