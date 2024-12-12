@@ -17,6 +17,12 @@ void selfTest(){
 	updateShiftRegisters();
 }
 
+void testpopulate(){
+	for(int i=0;i<40;i++){
+		notes[i]=700;
+	}
+}
+
 void setup(){
 	Serial.begin(250000);
 

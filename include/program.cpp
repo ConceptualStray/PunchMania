@@ -91,7 +91,7 @@ void run(){
 			if(activePads[i]<=localnow or (digitalRead(PAD_TO_PIN[i])==HIGH)){
 				//get ms time diff between now and the time the led should be turned off
 				//if greater than 0 we should award points based on time left, less time more points
-				int pointsToAward=localnow-activePads[i];
+				int pointsToAward=activePads[i]-localnow;
 				POINTS+=pointsToAward;
 				// Serial.println("Points: "+String(pointsToAward));
 				toggleLedOff(ledIds[i][7]);

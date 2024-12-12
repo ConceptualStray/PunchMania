@@ -12,7 +12,7 @@ else:
     print("false")
     exit()
 
-id=1
+# id=1
 
 COMID='COM7'
 BAUDRATE=250000
@@ -116,10 +116,11 @@ del notes[:initLoops]
 #here we start playing music and send the start key to ino
 pygame.mixer.init(devicename='Headphones (SPK01GO Stereo)')
 pygame.mixer.music.load(songFile)
-
+pygame.mixer.music.play(start=timeStart/1000)
+time.sleep(0.3)
 ino.write(('s\n').encode())
 # time.sleep(1.5)
-pygame.mixer.music.play(start=timeStart/1000)
+
 #get now in ms
 startTime=time.time()*1000
 
@@ -148,6 +149,7 @@ for note in notes:
 print("All notes loaded")
 while True:
 	time.sleep(0.5)
+	ino.read_all()
 	print("Duration: " + str(duration)+"now "+str(time.time()*1000 - startTime))
 	if (time.time()*1000 - startTime) >= timeEnd:
 		print("Song finished")
@@ -160,12 +162,12 @@ time.sleep(3)
 ino.write(('d\n').encode())
 time.sleep(4)
 #if song ended delete the {id}.state file from /state dir
-os.remove(os.path.join(dirScript, './state', str(id)+'.state'))
+os.remove(os.path.join(dirScript, './../state', str(id)+'.state'))
 #get points from ino and write to id.score file in /state dir
-
+ino.read_all()
 ino.write(('p\n').encode())
 time.sleep(1)
-points = ino.readline().strip().decode()
+points = ino.read_all().decode('utf-8').strip()
 
-with open(os.path.join(dirScript, './../points', id+'.score'), 'w') as f:
+with open(os.path.join(dirScript, './../points', str(id)+'.score'), 'w') as f:
 	f.write(points)
