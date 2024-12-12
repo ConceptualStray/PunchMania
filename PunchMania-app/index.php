@@ -11,10 +11,11 @@ foreach($states as $state){
 	if(preg_match('/\d+\.state/',$state)){
 		//get the id from the file
 		$__id=explode('.',$state)[0];
-		require_once 'playing.php';
+		header('Location: control/playing.php');
 		exit;
 	}
 }
 
-require_once 'picker.php';
+header('Location: control/picker.php');
+exit;
 
