@@ -6,13 +6,13 @@ import configparser
 import pygame
 import random
 
-if len(sys.argv) > 1:
-	id = sys.argv[1]
-else:
-	print("false")
-	exit()
+# if len(sys.argv) > 1:
+# 	id = sys.argv[1]
+# else:
+# 	print("false")
+# 	exit()
 
-# id=1.l
+id=1
 
 COMID='COM7'
 BAUDRATE=250000
@@ -114,12 +114,12 @@ del notes[:initLoops]
 
 
 #here we start playing music and send the start key to ino
-pygame.mixer.init()
+pygame.mixer.init(devicename='Headphones (SPK01GO Stereo)')
 pygame.mixer.music.load(songFile)
 
 ino.write(('s\n').encode())
 # time.sleep(1.5)
-pygame.mixer.music.play(start=((timeStart/1000)-5000),fade_ms=5000)
+pygame.mixer.music.play(start=timeStart/1000)
 #get now in ms
 startTime=time.time()*1000
 
@@ -160,8 +160,9 @@ time.sleep(3)
 ino.write(('d\n').encode())
 time.sleep(4)
 #if song ended delete the {id}.state file from /state dir
-os.remove(os.path.join(dirScript, './state', id+'.state'))
+os.remove(os.path.join(dirScript, './state', str(id)+'.state'))
 #get points from ino and write to id.score file in /state dir
+
 
 ino.write(('p\n').encode())
 time.sleep(1)
