@@ -16,7 +16,7 @@ function activeTileCallback(el) {
 	$('#content').addClass('hide');
 	timeoutId = setTimeout(() => {
 		var id = $(el).attr('songId');
-		$.get('/controls.php?id=' + id, function(data){
+		$.get('/control/controls.php?id=' + id, function(data){
 			$('#content').html(data);
 			$('#content').removeClass('hide');
 			$('#progressBar').addClass('hide');
