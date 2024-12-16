@@ -3,12 +3,23 @@
 int lastGroup=-1;
 int leftSide[3] = {0,1,2};
 int rightSide[3] = {3,4,5};
+int weights[] = {2, 2, 1, 2, 2, 1};  // Example: Pads 2 and 5 have higher probability (weight 2) - zero indexed obv
+
+int cumulativeWeights[6] = {0};
+int totalWeight = 0;
+
+void calculateCumulativeWeights() {
+	cumulativeWeights[0] = weights[0];
+	for (int i = 1; i < 6; i++) {
+		cumulativeWeights[i] = cumulativeWeights[i - 1] + weights[i];
+	}
+	totalWeight = cumulativeWeights[5]; // Total weight is the last cumulative weight
+}
 
 //take into consideration options like:
 //allowDoubles - same id twice in a row
 //disabled ids
 //flip sides - if true allow only opposite sides
-
 
 int getRandomGroupId(){
 	int availableGroups[6];
@@ -28,8 +39,14 @@ int getRandomGroupId(){
 		availableGroups[count++] = i; 
 	}
 	if(count==0) return 0;
-	int randomIndex = random(0, count);
-	lastGroup = availableGroups[randomIndex];
+    int randomWeight = random(0, totalWeight);
+    // Find the corresponding group based on the random weight
+    for (int i = 0; i < count; i++) {
+        if (randomWeight <= cumulativeWeights[availableGroups[i]]) {
+            lastGroup = availableGroups[i];
+            break;
+        }
+    }
 	return lastGroup;
 }
 
