@@ -6,13 +6,13 @@ import configparser
 import pygame
 import random
 
-if len(sys.argv) > 1:
-    id = sys.argv[1]
-else:
-    print("false")
-    exit()
+# if len(sys.argv) > 1:
+#     id = sys.argv[1]
+# else:
+#     print("false")
+#     exit()
 
-# id=9
+id=9
 
 COMID='COM4'
 BAUDRATE=250000
@@ -44,10 +44,14 @@ timeEnd = timeStart+duration
 offset=int(config['offset'])
 scanAhead=int(config['scanAhead'])
 allowDoubles=int(config['allowDoubles'])
+flipSides=True
 skipBeats=False
 
 ino.write(('o'+str(offset)+'\n').encode())
 #we can add support for rest of config later in development
+ino.write(('g'+str(allowDoubles)+'\n').encode());
+ino.write(('f'+str(flipSides)+'\n').encode());
+
 
 notes = []
 lastNoteTime=0

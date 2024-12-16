@@ -6,20 +6,11 @@
 #define MAX_NOTES 50
 #define MAX_MEM_NOTES 24
 
-#define START_SEQUENCE_DURATION 1500
-
 #define DURATION_LED_MAIN 500  // 0.3 seconds in milliseconds
 #define PAD_THRESHOLD 200
 const int PAD_TO_PIN[6]={
-	// A3,
-	// A0,
-	// A1,
-	// A2,
-	// A4,
-	// A5
 	A2,A1,A3,A0,A4,A5
 };
-
 
 
 int TIME_SCAN_AHEAD=1000;
@@ -28,19 +19,6 @@ long TIME_START=0;
 long TIME_NOTES_AGGREGATED=0;
 
 int DURATION_LED_SUB=TIME_SCAN_AHEAD/8;
-
-
-// const char* validCommandPointers[] = {
-// 	"s",//start playing
-// 	"p",//get points
-// 	"e",//end playing
-// 	"o",//offset
-// 	"n",//notes
-// 	"l",//toggle leds
-// 	"d",//debug active leds
-
-// };
-
 
 const int ledIds[6][8] = {
     {33,34,11,35,37,10,9,36},   // LED IDs for group 0
@@ -52,15 +30,12 @@ const int ledIds[6][8] = {
 };
 
 bool isPlaying=false;
-bool isInCountdown=true;
 
 bool allowDoubles=false;
-bool flipSides=false;
+bool flipSides=true;
 int disabledIds[6]={0};
 
-
 unsigned long OFFSET_NOTE=0;
-
 
 uint32_t notes[MAX_NOTES];
 byte shiftRegisterState[6] = {0}; // Each byte controls 8 outputs

@@ -9,12 +9,6 @@ long now(){
 	return millis()-TIME_START-OFFSET_NOTE;
 }
 
-// void testpopulate(){
-// 	for(int i=0;i<70;i++){
-// 		notes[i]=700;
-// 	}
-// }
-
 void clearMemory(){
 	for(int i=0;i<MAX_MEM_NOTES;i++){
 		Note note;
@@ -97,6 +91,7 @@ void processCommand(char pointer, const char* commandValue) {
 		return;
 	}else if(pointer=='p'){
 		Serial.println(POINTS);
+		POINTS=0;
 		return;
 
 	}else if(pointer=='r'){
@@ -136,6 +131,19 @@ void processCommand(char pointer, const char* commandValue) {
 		return;
 	}else if(pointer=='c'){
 		randomSeed(atoi(commandValue));
+		Serial.println(1);
+		return;
+	}else if(pointer=='f'){
+		//flipsides
+		//cast int 0/1 to bool
+		flipSides=atoi(commandValue);
+		Serial.println(1);
+		return;
+	}else if(pointer=='g'){
+		//doubles
+		allowDoubles=atoi(commandValue);
+		Serial.println(1);
+		return;
 	}
 }
 
