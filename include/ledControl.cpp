@@ -1,24 +1,82 @@
 #include <Arduino.h>
 
 int lastGroup=-1;
+int leftSide[3] = {0,1,2};
+int rightSide[3] = {3,4,5};
+int weights[] = {2, 2, 1, 2, 2, 1};  // Example: Pads 2 and 5 have higher probability (weight 2) - zero indexed obv
+
+int cumulativeWeights[6] = {0};
+int totalWeight = 0;
+
+void calculateCumulativeWeights() {
+	cumulativeWeights[0] = weights[0];
+	for (int i = 1; i < 6; i++) {
+		cumulativeWeights[i] = cumulativeWeights[i - 1] + weights[i];
+	}
+	totalWeight = cumulativeWeights[5]; // Total weight is the last cumulative weight
+}
 
 //take into consideration options like:
 //allowDoubles - same id twice in a row
 //disabled ids
 //flip sides - if true allow only opposite sides
+
 int getRandomGroupId(){
 	int availableGroups[6];
 	int count = 0;
+	bool lastWasLeft = (lastGroup != -1 && lastGroup < 3);
+	bool lastWasRight = (lastGroup != -1 && lastGroup >= 3);
+
 	for(int i=0;i<6;i++){
 		if (disabledIds[i] != 0) continue;  // Skip disabled IDs
 		if (!allowDoubles and i == lastGroup) continue;  // Skip if doubles aren’t allowed
-		if (flipSides and lastGroup != -1 and abs(i - lastGroup) % 3 != 0) continue;  // Skip if flipSides restricts
+		// Skip if flipSides restricts
+		if(flipSides and lastGroup != -1){
+			if (lastWasLeft && i < 3) continue;  // Skip left side if last was left
+			if (lastWasRight && i >= 3) continue;  // Skip right side if last was right
+		}
 
 		availableGroups[count++] = i; 
 	}
-	int randomIndex = random(0, count);
-	lastGroup = availableGroups[randomIndex];
+	if(count==0) return 0;
+    int randomWeight = random(0, totalWeight);
+    // Find the corresponding group based on the random weight
+    for (int i = 0; i < count; i++) {
+        if (randomWeight <= cumulativeWeights[availableGroups[i]]) {
+            lastGroup = availableGroups[i];
+            break;
+        }
+    }
 	return lastGroup;
+}
+
+void lastNoteDance() {
+	//we toggle each sequential led on each group
+	for (size_t i = 0; i < 8; i++) {
+		for(size_t j=0;j<6;j++){
+			toggleLed(ledIds[j][i]);
+		}
+		updateShiftRegisters();
+		delay(100);
+	}
+	//do a while group blink blink 3 times
+	for (size_t i = 0; i < 6; i++) {
+		for(size_t j=0;j<6;j++){
+			toggleWholeGroup(j);
+		}
+		updateShiftRegisters();
+		delay(200);
+		
+	}
+	//the same but other way around
+	for (size_t i = 0; i < 8; i++) {
+		for(size_t j=0;j<6;j++){
+			toggleLedOff(ledIds[j][i]);
+		}
+		delay(100);
+		updateShiftRegisters();
+		
+	}
 }
 
 void updateShiftRegisters() {
@@ -78,39 +136,4 @@ void toggleWholeGroup(int groupId){
 		toggleLed(ledIds[groupId][j]); // Use ledIds[i][j] to get the LED ID
 	}
 	// if(debug)Serial.println("Toggling group "+String(groupId));
-}
-
-
-void lastNoteDance() {
-	//we toggle each sequential led on each group
-	for (size_t i = 0; i < 8; i++) {
-		for(size_t j=0;j<6;j++){
-			toggleLed(ledIds[j][i]);
-		}
-		updateShiftRegisters();
-		delay(100);
-	}
-
-
-	//do a while group blink blink 3 times
-	for (size_t i = 0; i < 6; i++) {
-		for(size_t j=0;j<6;j++){
-			toggleWholeGroup(j);
-		}
-		updateShiftRegisters();
-		delay(200);
-		
-	}
-
-
-	//the same but other way around
-	for (size_t i = 0; i < 8; i++) {
-		for(size_t j=0;j<6;j++){
-			toggleLedOff(ledIds[j][i]);
-		}
-		delay(100);
-		updateShiftRegisters();
-		
-	}
-
 }
