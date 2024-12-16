@@ -12,17 +12,22 @@ else:
     print("false")
     exit()
 
-# id=1
+# id=9
 
-COMID='COM7'
+COMID='COM4'
 BAUDRATE=250000
 ino = serial.Serial(COMID, BAUDRATE)
+pygame.mixer.init(devicename='Speakers (Sound Blaster Play! 2)')
+# time.sleep(3)
+# pygame.mixer.init()
 
 
 dirScript=os.path.dirname(__file__)
 songFile=os.path.join(dirScript, './../data/'+str(id), 'song.mp3')
 configFile=os.path.join(dirScript, './../data/'+str(id), 'config.ini')
 notesFile=os.path.join(dirScript, './../data/'+str(id), 'notes.ini')
+
+pygame.mixer.music.load(songFile)
 
 with open(configFile, 'r') as f:
 	config_string = '[default]\n' + f.read()
@@ -114,11 +119,23 @@ del notes[:initLoops]
 
 
 #here we start playing music and send the start key to ino
-pygame.mixer.init(devicename='Headphones (SPK01GO Stereo)')
-pygame.mixer.music.load(songFile)
+
+# pygame.mixer.init()
+
 pygame.mixer.music.play(start=timeStart/1000)
-time.sleep(0.3)
+# time.sleep(0.3)
 ino.write(('s\n').encode())
+while True:
+	response = ino.readline().strip()
+	print(f"Response {response}")
+	if response == b'1':
+		break
+	else:
+		time.sleep(0.2)
+		ino.write(('s\n').encode())
+		time.sleep(0.2)
+
+
 # time.sleep(1.5)
 
 #get now in ms
