@@ -44,8 +44,8 @@ timeEnd = timeStart+duration
 offset=int(config['offset'])
 scanAhead=int(config['scanAhead'])
 allowDoubles=int(config['allowDoubles'])
-flipSides=True
-skipBeats=False
+flipSides=int(config['flipSides'])
+skipBeats=int(config['skipBeats'])
 
 ino.write(('o'+str(offset)+'\n').encode())
 #we can add support for rest of config later in development

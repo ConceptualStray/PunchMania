@@ -1,3 +1,4 @@
+let audio = null;
 
 document.addEventListener('DOMContentLoaded', function() {
 	var elems = document.querySelectorAll('.carousel');
@@ -14,6 +15,11 @@ function activeTileCallback(el) {
 	}
 	$('#progressBar').removeClass('hide');
 	$('#content').addClass('hide');
+	if (audio) {
+		audio.pause();
+		audio.currentTime = 0;
+		audio = null;
+	}
 	timeoutId = setTimeout(() => {
 		var id = $(el).attr('songId');
 		$.get('/control/controls.php?id=' + id, function(data){
@@ -24,15 +30,32 @@ function activeTileCallback(el) {
 	}, 700);
 }
 
+$(document).on('click', '#songPreview', function() {
+	const songId = $('#songId').val();
+	const songUrl = `/data/${songId}/song.mp3`;
+	const startTime = parseFloat($('#startTime').val()) || 0;
+	if (!audio) {
+		audio = new Audio(songUrl);
+		audio.volume = 0.5; // Set volume to 50%
+		audio.currentTime = startTime;
+		audio.play();
+	} else if (audio.paused) {
+		audio.currentTime = startTime;
+		audio.play();
+	} else {
+		audio.pause();
+		audio.currentTime = startTime;
+	}
+});
 
-$('body').on('input','#offset', function(){
+$('body').on('input', '#offset', function(){
 	var offset = $(this).val();
 	$('#offsetValue').html(offset);
 });
 
-document.addEventListener('range-changed', (e) => {
+$('body').on('range-changed', (e) => {
 	const data = e.detail;
 	$('#startTime').val(data.minRangeValue);
 	$('#endTime').val(data.maxRangeValue);
 	// data = { sliderId: null, minRangeValue: 0, maxRangeValue: 1000 }
-  });
+});

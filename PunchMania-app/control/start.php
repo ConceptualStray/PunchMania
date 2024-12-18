@@ -2,15 +2,25 @@
 $id=$_POST['id'];
 
 $offset=$_POST['offset'];
-$allowDoubles=$_POST['allowDoubles']??'false';
+$allowDoubles=$_POST['allowDoubles']??0;
+$skipBeats=$_POST['skipBeats']??0;
+$flipSides=$_POST['flipSides']??0;
 $timeSongStart=$_POST['startTime']*1000;
 $timeSongEnd=$_POST['endTime']*1000;
 
+//read notes.ini
+$notes=file('../data/'.$id.'/notes.ini');
+$firstBeat=$notes[0];
+if($timeSongEnd<$firstBeat){
+	$timeSongEnd=$firstBeat+1000;
+}
 
 $configFile='../data/'.$id.'/config.ini';
 $config=parse_ini_file($configFile);
 $config['offset']=$offset;
 $config['allowDoubles']=$allowDoubles;
+$config['flipSides']=$flipSides;
+$config['skipBeats']=$skipBeats;
 $config['startTime']=$timeSongStart;
 $config['duration']=$timeSongEnd-$timeSongStart;
 
