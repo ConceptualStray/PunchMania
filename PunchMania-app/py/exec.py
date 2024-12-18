@@ -6,18 +6,18 @@ import configparser
 import pygame
 import random
 
-# if len(sys.argv) > 1:
-#     id = sys.argv[1]
-# else:
-#     print("false")
-#     exit()
+if len(sys.argv) > 1:
+    id = sys.argv[1]
+else:
+    print("false").__annotations__
+    exit()
 
-id=9
+# id=9
 
 COMID='COM4'
 BAUDRATE=250000
 ino = serial.Serial(COMID, BAUDRATE)
-pygame.mixer.init(devicename='Speakers (Sound Blaster Play! 2)')
+pygame.mixer.init(devicename='Speakers (USB Audio Device)')
 # time.sleep(3)
 # pygame.mixer.init()
 
