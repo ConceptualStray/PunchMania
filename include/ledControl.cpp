@@ -3,6 +3,7 @@
 int lastGroup=-1;
 int leftSide[3] = {5,0,1};
 int rightSide[3] = {2,3,4};
+int biases[6] = {10, 10, 1, 10, 10, 1}; // Bias weights for each ID
 
 //take into consideration options like:
 //allowDoubles - same id twice in a row
@@ -10,36 +11,53 @@ int rightSide[3] = {2,3,4};
 //flip sides - if true allow only opposite sides
 
 int getRandomGroupId(){
-	int availableGroups[6];
-	int count = 0;
-	bool lastWasLeft=false;
-	bool lastWasRight=false;
-	for (size_t i = 0; i < 6; i++){
-		if(leftSide[i]==lastGroup){
-			lastWasLeft=true;
-			break;
-		}
-		if(rightSide[i]==lastGroup){
-			lastWasRight=true;
-			break;
-		}
-	}
-	
-	for(int i=0;i<6;i++){
-		if (disabledIds[i] != 0) continue;  // Skip disabled IDs
-		if (!allowDoubles and i == lastGroup) continue;  // Skip if doubles aren’t allowed
-		// Skip if flipSides restricts
-		if(flipSides and lastGroup != -1){
-			if (lastWasLeft && i < 3) continue;  // Skip left side if last was left
-			if (lastWasRight && i >= 3) continue;  // Skip right side if last was right
-		}
+    int availableGroups[6];
+    int cumulativeWeights[6];
+    int count = 0;
+    int weightSum = 0;
+    bool lastWasLeft=false;
+    bool lastWasRight=false;
 
-		availableGroups[count++] = i; 
-	}
-	if(count==0) return 0;
-	int randomIndex = random(0, count);
-	lastGroup = availableGroups[randomIndex];
-	return lastGroup;
+    for (size_t i = 0; i < 6; i++){
+        if(leftSide[i]==lastGroup){
+            lastWasLeft=true;
+            break;
+        }
+        if(rightSide[i]==lastGroup){
+            lastWasRight=true;
+            break;
+        }
+    }
+
+    for(int i=0;i<6;i++){
+        if (disabledIds[i] != 0) continue;  // Skip disabled IDs
+        if (!allowDoubles and i == lastGroup) continue;  // Skip if doubles aren’t allowed
+        // Skip if flipSides restricts
+        if(flipSides and lastGroup != -1){
+            if (lastWasLeft && i < 3) continue;  // Skip left side if last was left
+            if (lastWasRight && i >= 3) continue;  // Skip right side if last was right
+        }
+
+        availableGroups[count] = i;
+        weightSum += biases[i];
+        cumulativeWeights[count] = weightSum;
+        count++;
+    }
+
+    if(count==0) return 0;
+
+    // Generate random number within the range [0, total weight)
+    int randVal = random(0, weightSum);
+
+    // Find the corresponding index using cumulative weights
+    for (int i = 0; i < count; i++){
+        if (randVal < cumulativeWeights[i]){
+            lastGroup = availableGroups[i];
+            return lastGroup;
+        }
+    }
+
+    return -1; // Should never reach here
 }
 
 
