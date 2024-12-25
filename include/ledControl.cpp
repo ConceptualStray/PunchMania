@@ -3,7 +3,7 @@
 int lastGroup=-1;
 int leftSide[3] = {5,0,1};
 int rightSide[3] = {2,3,4};
-int biases[6] = {10, 10, 1, 10, 10, 1}; // Bias weights for each ID
+int biases[6] = {10, 10, 2, 10, 10, 2}; // Bias weights for each ID
 
 //take into consideration options like:
 //allowDoubles - same id twice in a row
@@ -147,5 +147,11 @@ void lastNoteDance() {
 		delay(100);
 		updateShiftRegisters();
 		
+	}
+}
+
+void toggleLedLeads(){
+	for (size_t i = 0; i < 7; i++){
+		toggleLed(ledIds[i][0]);
 	}
 }

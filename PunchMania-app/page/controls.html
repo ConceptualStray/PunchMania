@@ -16,35 +16,42 @@
 	<div class="row">
 		<input type="hidden" name="id" id="songId" value="[@id]" />
 		<div class="divider"></div>
-		<div class="col s6">
-			<p>
-				<label>
-					<input type="checkbox" class="filled-in" name="allowDoubles" value="0" [@doubles] />
-					<span>Zezwól na powtórzenia</span>
-				</label>
-			</p>
-		</div>
-		<div class="col s6">
-			<p>
-				<label>
-					<input type="checkbox" class="filled-in" name="flipSides" value="1" [@flipSides] />
-					<span>Przeciwne strony</span>
-				</label>
-			</p>
-		</div>
-		<p>
-			<label>
-				<input type="checkbox" class="filled-in" name="skipBeats" value="1" [@skipBeats] />
-				<span>Pomiń uderzenia</span>
-			</label>
-		</p>
+
+			<div class="col s6">
+				<p>
+					<label>
+						<input type="checkbox" class="filled-in" name="allowDoubles" value="0" [@doubles] />
+						<span>Duble</span>
+					</label>
+				</p>
+			</div>
+			<div class="col s6">
+				<p>
+					<label>
+						<input type="checkbox" class="filled-in" name="flipSides" value="1" [@flipSides] />
+						<span>Przeciwne strony</span>
+					</label>
+				</p>
+			</div>
+
+			<div class="col s6">
+				<p>
+					<label>
+						<input type="checkbox" class="filled-in" name="skipBeats" value="1" [@skipBeats] />
+						<span>Pomiń uderzenia</span>
+					</label>
+				</p>
+			</div>
+			<div class="col s6">
+				<p class="range-field">
+					<label for="offset">Przesunięcie czasowe <span id="offsetValue">[@offset]</span> ms</label>
+					<input id="offset" name="offset" type="range" step="margin-top: 0;" value="[@offset]" id="offset" min="-150" max="150" />
+				</p>
+			</div>
+
+
 	</div>
-		<div class="col s6">
-			<p class="range-field">
-				<label for="offset">Przesunięcie czasowe <span id="offsetValue">[@offset]</span> ms</label>
-				<input id="offset" name="offset" type="range" step="margin-top: 0;" value="[@offset]" id="offset" min="-150" max="150" />
-			</p>
-		</div>
+	<div class="row">
 		<div class="col s12">
 			<input type="hidden" name="startTime" id="startTime" value="[@startTime]" />
 			<input type="hidden" name="endTime" id="endTime" value="[@totalTimeInt]" />
@@ -61,7 +68,7 @@
 				hide-legend
 				slider-color="#006064"
 				label-font-weight="100"
-		/>
+			/>
 		</div>
 	</div>
 	<div class="divider"></div>
@@ -75,7 +82,6 @@
 	<div class="row">
 		<div class="col s6">
 			<button type="submit" class="blue btn waves-effect waves-light col s12" id="saveButton">Start <span class="material-symbols-outlined right">play_arrow</span></button>
-			
 		</div>
 		<div class="col s6">
 			<a href="#!" id="songPreview" class="green btn waves-effect waves-light col s12" >Posłuchaj<span class="material-symbols-outlined right">headphones</span></a>

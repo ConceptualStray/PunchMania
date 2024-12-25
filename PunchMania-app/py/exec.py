@@ -17,7 +17,7 @@ else:
 COMID='COM4'
 BAUDRATE=250000
 ino = serial.Serial(COMID, BAUDRATE)
-pygame.mixer.init(devicename='Speakers (USB Audio Device)')
+pygame.mixer.init(devicename='Speakers (2- USB Audio Device)')
 # time.sleep(3)
 # pygame.mixer.init()
 
@@ -69,7 +69,7 @@ with open(notesFile, 'r') as f:
 		timestamp = int(line.strip())
 		if timestamp >= timeStart and timestamp <= timeEnd:
 			# Calculate relative time between last note and this note
-			relativeTime = timestamp - lastNoteTime + accumulatedTime
+			relativeTime = (timestamp - lastNoteTime) + accumulatedTime
 			lastNoteTime = timestamp
 			
 			if accumulate:
@@ -126,23 +126,13 @@ del notes[:initLoops]
 
 # pygame.mixer.init()
 
-pygame.mixer.music.play(start=timeStart/1000)
-# time.sleep(0.3)
+
+
 ino.write(('s\n').encode())
-while True:
-	response = ino.readline().strip()
-	print(f"Response {response}")
-	if response == b'1':
-		break
-	else:
-		time.sleep(0.2)
-		ino.write(('s\n').encode())
-		time.sleep(0.2)
+time.sleep(0.3)
+pygame.mixer.music.play(start=timeStart/1000)
 
 
-# time.sleep(1.5)
-
-#get now in ms
 startTime=time.time()*1000
 
 

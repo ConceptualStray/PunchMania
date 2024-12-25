@@ -8,7 +8,8 @@
 
 .carousel .carousel-item img {
 	width: 100%; /* Adjust the width as needed */
-	height: 100%; /* Make height equal to width for a square */
+
+	height: 400px; /* Make height equal to width for a square */
 	max-width: 400px; /* Set a maximum width if needed */
 	max-height: 400px; /* Set a maximum height if needed */
 	object-fit: cover;
